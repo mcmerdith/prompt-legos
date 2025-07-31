@@ -1,0 +1,18 @@
+.prompt-lego-widget-root {
+  &, main, footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: stretch;
+  }
+  height: 100%;
+  main {
+    scrollbar-width: none;
+    overflow-y: scroll;
+    flex: 1 1 auto;
+  }
+  footer {
+    margin-top: auto;
+    flex: 0 1 auto;
+  }
+}
