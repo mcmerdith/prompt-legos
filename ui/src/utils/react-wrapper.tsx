@@ -1,9 +1,9 @@
-import {
-  type BottomPanelExtension,
+import type {
+  BottomPanelExtension,
   DOMWidget,
   DOMWidgetOptions
 } from '@comfyorg/comfyui-frontend-types'
-import { LGraphNode } from '@comfyorg/litegraph'
+import type { LGraphNode } from '@comfyorg/litegraph'
 import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 
