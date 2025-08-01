@@ -1,6 +1,6 @@
-import { app } from '@/utils/shims'
+import { app } from "@/utils/shims"
 
-import './widget.scss'
+import "./widget.scss"
 
 export default function PromptWidget() {
   return (
@@ -12,7 +12,7 @@ export default function PromptWidget() {
         <button
           onClick={() => {
             app.extensionManager.command.execute(
-              'Workspace.ToggleBottomPanelTab.prompt-legos-prompt-creator'
+              "Workspace.ToggleBottomPanelTab.prompt-legos-prompt-creator"
             )
           }}
         >

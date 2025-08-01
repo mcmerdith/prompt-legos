@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react"
 
-import './prompt-creator.scss'
+import "./prompt-creator.scss"
 
 // Create a React component for the tab content
 export default function PromptCreator() {
@@ -14,12 +14,12 @@ export default function PromptCreator() {
       <button
         onClick={() => setCount(count + 1)}
         style={{
-          padding: '8px 12px',
-          backgroundColor: '#4CAF50',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer'
+          padding: "8px 12px",
+          backgroundColor: "#4CAF50",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer"
         }}
       >
         Increment

@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useEffect, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 
-import { app } from '../utils/shims'
-import './sidebar-tab.scss'
+import { app } from "../utils/shims"
+import "./sidebar-tab.scss"
 
 // Interface for our processed node data
 interface ProcessedNode {
@@ -19,16 +19,16 @@ interface ProcessedNode {
 type CategoryColors = Record<string, string>
 
 const CATEGORY_COLORS: CategoryColors = {
-  loaders: '#7e57c2',
-  conditioning: '#26a69a',
-  sampling: '#ef5350',
-  latent: '#66bb6a',
-  image: '#42a5f5',
-  mask: '#ff9800',
-  'conditioning/clip': '#26a69a',
-  'image/postprocessing': '#ec407a',
-  advanced: '#5c6bc0',
-  _default: '#78909c'
+  loaders: "#7e57c2",
+  conditioning: "#26a69a",
+  sampling: "#ef5350",
+  latent: "#66bb6a",
+  image: "#42a5f5",
+  mask: "#ff9800",
+  "conditioning/clip": "#26a69a",
+  "image/postprocessing": "#ec407a",
+  advanced: "#5c6bc0",
+  _default: "#78909c"
 }
 
 interface NodeStatsChartProps {
@@ -87,9 +87,9 @@ function CategoryFilter({
     <div className="category-filter">
       <button
         className={
-          selectedCategory === 'all' ? 'filter-button active' : 'filter-button'
+          selectedCategory === "all" ? "filter-button active" : "filter-button"
         }
-        onClick={() => onSelectCategory('all')}
+        onClick={() => onSelectCategory("all")}
       >
         All
       </button>
@@ -98,8 +98,8 @@ function CategoryFilter({
           key={category}
           className={
             selectedCategory === category
-              ? 'filter-button active'
-              : 'filter-button'
+              ? "filter-button active"
+              : "filter-button"
           }
           onClick={() => onSelectCategory(category)}
           style={{
@@ -118,7 +118,7 @@ function CategoryFilter({
 function App() {
   const { t } = useTranslation()
   const [nodes, setNodes] = useState<ProcessedNode[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [isQueueRunning, setIsQueueRunning] = useState<boolean>(false)
   const [highlightedNode, setHighlightedNode] = useState<
     string | number | null
@@ -140,13 +140,13 @@ function App() {
 
       for (const node of graphNodes) {
         // Extract category from constructorData if available
-        let category = ''
-        if (node.constructor && 'nodeData' in node.constructor) {
+        let category = ""
+        if (node.constructor && "nodeData" in node.constructor) {
           const nodeData = node.constructor.nodeData
           if (
             nodeData &&
-            typeof nodeData === 'object' &&
-            'category' in nodeData
+            typeof nodeData === "object" &&
+            "category" in nodeData
           ) {
             category = nodeData.category as string
           }
@@ -171,10 +171,10 @@ function App() {
       collectNodes()
     }
 
-    app?.api.addEventListener('graphChanged', handleGraphChanged)
+    app?.api.addEventListener("graphChanged", handleGraphChanged)
 
     return () => {
-      app?.api.removeEventListener('graphChanged', handleGraphChanged)
+      app?.api.removeEventListener("graphChanged", handleGraphChanged)
     }
   }, [])
 
@@ -186,19 +186,19 @@ function App() {
     const handleQueueComplete = () => setIsQueueRunning(false)
 
     // Using the Event API with properly typed events
-    app.api.addEventListener('execution_start', handleQueueStart)
+    app.api.addEventListener("execution_start", handleQueueStart)
 
     // Since 'execution_complete' is not directly in the types, we add a compatibility approach
     type ApiEventName = Parameters<typeof app.api.addEventListener>[0]
     app.api.addEventListener(
-      'execution_complete' as ApiEventName,
+      "execution_complete" as ApiEventName,
       handleQueueComplete
     )
 
     return () => {
-      app?.api.removeEventListener('execution_start', handleQueueStart)
+      app?.api.removeEventListener("execution_start", handleQueueStart)
       app?.api.removeEventListener(
-        'execution_complete' as ApiEventName,
+        "execution_complete" as ApiEventName,
         handleQueueComplete
       )
     }
@@ -218,7 +218,7 @@ function App() {
 
     // Highlight the node
     const originalColor = node.color
-    node.color = '#ff5722'
+    node.color = "#ff5722"
     app.graph.setDirtyCanvas(true, false)
 
     // Reset highlight after a delay
@@ -243,7 +243,7 @@ function App() {
   const { filteredNodes, categories, nodeCounts, totalNodes } = useMemo(() => {
     // Get filtered nodes based on selected category
     const filtered =
-      selectedCategory === 'all'
+      selectedCategory === "all"
         ? nodes
         : nodes.filter((node) => node.category === selectedCategory)
 
@@ -269,19 +269,19 @@ function App() {
 
   return (
     <div className="prompt-legos-container">
-      <h2>{t('app.title')}</h2>
+      <h2>{t("app.title")}</h2>
 
       <div className="stats-overview">
         <div className="stat-card">
           <div className="stat-value">{totalNodes}</div>
-          <div className="stat-label">{t('app.nodeStats.totalNodes')}</div>
+          <div className="stat-label">{t("app.nodeStats.totalNodes")}</div>
         </div>
         <div className="stat-card">
           <div className="stat-value">{categories.length}</div>
-          <div className="stat-label">{t('app.nodeStats.uniqueNodeTypes')}</div>
+          <div className="stat-label">{t("app.nodeStats.uniqueNodeTypes")}</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value">{isQueueRunning ? 'Active' : 'Idle'}</div>
+          <div className="stat-value">{isQueueRunning ? "Active" : "Idle"}</div>
           <div className="stat-label">Queue Status :)</div>
         </div>
       </div>
@@ -291,12 +291,12 @@ function App() {
         {totalNodes > 0 ? (
           <NodeStatsChart nodeCounts={nodeCounts} totalNodes={totalNodes} />
         ) : (
-          <div className="empty-state">{t('app.noNodes')}</div>
+          <div className="empty-state">{t("app.noNodes")}</div>
         )}
       </div>
 
       <div className="dashboard-section">
-        <h3>{t('app.nodeList.title')}</h3>
+        <h3>{t("app.nodeList.title")}</h3>
         <CategoryFilter
           categories={categories}
           selectedCategory={selectedCategory}
@@ -321,10 +321,10 @@ function App() {
                 <div className="node-title">{node.title}</div>
                 <div className="node-meta">
                   <span>
-                    {t('app.nodeList.inputs')}: {node.inputs}
+                    {t("app.nodeList.inputs")}: {node.inputs}
                   </span>
                   <span>
-                    {t('app.nodeList.outputs')}: {node.outputs}
+                    {t("app.nodeList.outputs")}: {node.outputs}
                   </span>
                 </div>
               </div>
@@ -332,18 +332,18 @@ function App() {
           ) : (
             <div className="empty-state">
               {totalNodes === 0
-                ? t('app.noNodes')
-                : 'No nodes match the selected filter'}
+                ? t("app.noNodes")
+                : "No nodes match the selected filter"}
             </div>
           )}
         </div>
       </div>
 
-      <div className="dashboard-section" style={{ marginTop: '20px' }}>
+      <div className="dashboard-section" style={{ marginTop: "20px" }}>
         <h3>API Examples</h3>
         <div
           className="api-examples"
-          style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}
+          style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}
         >
           <h4>Dialog API</h4>
           <button
@@ -352,10 +352,10 @@ function App() {
               // Dialog API Example - Prompt
               void app?.extensionManager.dialog
                 .prompt({
-                  title: 'Dialog API Demo',
+                  title: "Dialog API Demo",
                   message:
-                    'This is a prompt dialog example. Please enter something:',
-                  defaultValue: 'Dialog API is great!'
+                    "This is a prompt dialog example. Please enter something:",
+                  defaultValue: "Dialog API is great!"
                 })
                 .then((result) => {
                   if (result !== null) {
@@ -364,13 +364,13 @@ function App() {
                 })
             }}
             style={{
-              padding: '8px 12px',
-              backgroundColor: '#2196F3',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              margin: '5px'
+              padding: "8px 12px",
+              backgroundColor: "#2196F3",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              margin: "5px"
             }}
           >
             Show Prompt Dialog
@@ -382,22 +382,22 @@ function App() {
               // Dialog API Example - Confirm
               void app?.extensionManager.dialog
                 .confirm({
-                  title: 'Confirm Action',
-                  message: 'This is a confirmation dialog example.',
-                  type: 'default'
+                  title: "Confirm Action",
+                  message: "This is a confirmation dialog example.",
+                  type: "default"
                 })
                 .then((result) => {
-                  alert(result ? 'You confirmed!' : 'You cancelled!')
+                  alert(result ? "You confirmed!" : "You cancelled!")
                 })
             }}
             style={{
-              padding: '8px 12px',
-              backgroundColor: '#FF9800',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              margin: '5px'
+              padding: "8px 12px",
+              backgroundColor: "#FF9800",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              margin: "5px"
             }}
           >
             Show Confirm Dialog
@@ -409,20 +409,20 @@ function App() {
             onClick={() => {
               // Toast API Example - Info
               app?.extensionManager.toast.add({
-                severity: 'info',
-                summary: 'Information',
-                detail: 'This is an info toast message',
+                severity: "info",
+                summary: "Information",
+                detail: "This is an info toast message",
                 life: 3000
               })
             }}
             style={{
-              padding: '8px 12px',
-              backgroundColor: '#2196F3',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              margin: '5px'
+              padding: "8px 12px",
+              backgroundColor: "#2196F3",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              margin: "5px"
             }}
           >
             Show Info Toast
@@ -433,20 +433,20 @@ function App() {
             onClick={() => {
               // Toast API Example - Success
               app?.extensionManager.toast.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: 'Operation completed successfully!',
+                severity: "success",
+                summary: "Success",
+                detail: "Operation completed successfully!",
                 life: 3000
               })
             }}
             style={{
-              padding: '8px 12px',
-              backgroundColor: '#4CAF50',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              margin: '5px'
+              padding: "8px 12px",
+              backgroundColor: "#4CAF50",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              margin: "5px"
             }}
           >
             Show Success Toast
@@ -457,20 +457,20 @@ function App() {
             onClick={() => {
               // Toast API Example - Warning
               app?.extensionManager.toast.add({
-                severity: 'warn',
-                summary: 'Warning',
-                detail: 'This action may cause issues!',
+                severity: "warn",
+                summary: "Warning",
+                detail: "This action may cause issues!",
                 life: 5000
               })
             }}
             style={{
-              padding: '8px 12px',
-              backgroundColor: '#FF9800',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              margin: '5px'
+              padding: "8px 12px",
+              backgroundColor: "#FF9800",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              margin: "5px"
             }}
           >
             Show Warning Toast
@@ -481,20 +481,20 @@ function App() {
             onClick={() => {
               // Toast API Example - Error
               app?.extensionManager.toast.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'Something went wrong!',
+                severity: "error",
+                summary: "Error",
+                detail: "Something went wrong!",
                 life: 5000
               })
             }}
             style={{
-              padding: '8px 12px',
-              backgroundColor: '#F44336',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              margin: '5px'
+              padding: "8px 12px",
+              backgroundColor: "#F44336",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              margin: "5px"
             }}
           >
             Show Error Toast
@@ -505,20 +505,20 @@ function App() {
             onClick={() => {
               // Toast API Example - Alert alternative using regular toast
               app?.extensionManager.toast.add({
-                severity: 'info',
-                summary: 'Alert',
-                detail: 'This is an alert message!',
+                severity: "info",
+                summary: "Alert",
+                detail: "This is an alert message!",
                 life: 3000
               })
             }}
             style={{
-              padding: '8px 12px',
-              backgroundColor: '#673AB7',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              margin: '5px'
+              padding: "8px 12px",
+              backgroundColor: "#673AB7",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              margin: "5px"
             }}
           >
             Show Alert Toast
@@ -527,7 +527,7 @@ function App() {
       </div>
 
       <div className="footer">
-        <p>{t('app.footer.clickToHighlight')}</p>
+        <p>{t("app.footer.clickToHighlight")}</p>
       </div>
     </div>
   )

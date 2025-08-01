@@ -1,9 +1,9 @@
-import './index.css'
-import { registerPromptCreator } from './prompt-creator'
-import { registerSidebar } from './sidebar-tab'
-import './utils/i18n'
-import { app } from './utils/shims'
-import { registerWidgets } from './widgets'
+import "./index.css"
+import { registerPromptCreator } from "./prompt-creator"
+import { registerSidebar } from "./sidebar-tab"
+import "./utils/i18n"
+import { app } from "./utils/shims"
+import { registerWidgets } from "./widgets"
 
 registerSidebar()
 registerWidgets()
@@ -12,24 +12,24 @@ registerPromptCreator()
 try {
   // Register extension with about page badges
   app.registerExtension({
-    name: 'PromptLegos',
+    name: "PromptLegos",
 
     // About Panel Badges API - Adds custom badges to the ComfyUI about page
     aboutPageBadges: [
       {
-        label: 'Documentation',
-        url: 'https://docs.comfy.org/custom-nodes/js/javascript_overview',
-        icon: 'pi pi-file'
+        label: "Documentation",
+        url: "https://docs.comfy.org/custom-nodes/js/javascript_overview",
+        icon: "pi pi-file"
       },
       {
-        label: 'GitHub',
-        url: 'https://github.com/Comfy-Org/ComfyUI-React-Extension-Template',
-        icon: 'pi pi-github'
+        label: "GitHub",
+        url: "https://github.com/Comfy-Org/ComfyUI-React-Extension-Template",
+        icon: "pi pi-github"
       },
       {
-        label: 'Support',
-        url: 'https://discord.gg/comfy-org',
-        icon: 'pi pi-discord'
+        label: "Support",
+        url: "https://discord.gg/comfy-org",
+        icon: "pi pi-discord"
       }
     ],
 
@@ -47,16 +47,16 @@ try {
     // Associate keybindings with the commands
     keybindings: [
       {
-        combo: { key: 'i', ctrl: true, alt: true },
-        commandId: 'reactExample.showInfo'
+        combo: { key: "i", ctrl: true, alt: true },
+        commandId: "reactExample.showInfo"
       },
 
       {
         combo: {
-          key: 'p',
+          key: "p",
           ctrl: true
         },
-        commandId: 'Workspace.ToggleBottomPanelTab.prompt-legos-prompt-creator'
+        commandId: "Workspace.ToggleBottomPanelTab.prompt-legos-prompt-creator"
       }
     ]
 
@@ -81,5 +81,5 @@ try {
 
   // Initialize the extension once everything is ready
 } catch (error) {
-  console.error('Failed to initialize React Example Extension:', error)
+  console.error("Failed to initialize React Example Extension:", error)
 }

@@ -2,16 +2,16 @@ import type {
   BottomPanelExtension,
   DOMWidget,
   DOMWidgetOptions
-} from '@comfyorg/comfyui-frontend-types'
-import type { LGraphNode } from '@comfyorg/litegraph'
-import React, { Suspense } from 'react'
-import ReactDOM from 'react-dom/client'
+} from "@comfyorg/comfyui-frontend-types"
+import type { LGraphNode } from "@comfyorg/litegraph"
+import React, { Suspense } from "react"
+import ReactDOM from "react-dom/client"
 
 function createReactApp<T extends React.ReactElement>(
   name: string,
   element: T
 ) {
-  const root = document.createElement('div')
+  const root = document.createElement("div")
   root.className = `prompt-lego-widget-root`
   root.id = `${name}-root`
 
@@ -35,7 +35,7 @@ export function addReactWidget<
 ): DOMWidget<HTMLElement, V> {
   const widget = node.addDOMWidget(
     name,
-    'custom',
+    "custom",
     createReactApp(name, element),
     options
   )
@@ -51,7 +51,7 @@ export function createReactBottomPanelTab<T extends React.ReactElement>(
   const bottomPanelTab: BottomPanelExtension = {
     id: id,
     title: name,
-    type: 'custom',
+    type: "custom",
     render: (el) => {
       const bottomPanelApp = createReactApp(name, element)
       el.appendChild(bottomPanelApp)

@@ -23,7 +23,7 @@
 /* Make sure our styles don't leak out to the rest of ComfyUI */
 #comfyui-react-example-root {
   height: 100%;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   box-sizing: border-box;
   color: var(--example-text-color);
 }

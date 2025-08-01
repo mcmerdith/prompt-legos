@@ -1,7 +1,7 @@
-import i18n from 'i18next'
-import LanguageDetector from 'i18next-browser-languagedetector'
-import Backend from 'i18next-http-backend'
-import { initReactI18next } from 'react-i18next'
+import i18n from "i18next"
+import LanguageDetector from "i18next-browser-languagedetector"
+import Backend from "i18next-http-backend"
+import { initReactI18next } from "react-i18next"
 
 // Define fallback translations for debugging
 interface TranslationResource {
@@ -36,25 +36,25 @@ const fallbackResources: TranslationResource = {
   en: {
     main: {
       app: {
-        title: 'React Example Extension (Fallback)',
-        description: 'Shows statistics about nodes in the current workflow',
-        noNodes: 'No nodes in the workflow',
+        title: "React Example Extension (Fallback)",
+        description: "Shows statistics about nodes in the current workflow",
+        noNodes: "No nodes in the workflow",
         nodeList: {
-          title: 'Node List',
-          id: 'ID',
-          type: 'Type',
-          category: 'Category',
-          inputs: 'Inputs',
-          outputs: 'Outputs'
+          title: "Node List",
+          id: "ID",
+          type: "Type",
+          category: "Category",
+          inputs: "Inputs",
+          outputs: "Outputs"
         },
         nodeStats: {
-          title: 'Node Statistics',
-          totalNodes: 'Total nodes',
-          uniqueNodeTypes: 'Unique node types'
+          title: "Node Statistics",
+          totalNodes: "Total nodes",
+          uniqueNodeTypes: "Unique node types"
         },
         footer: {
           clickToHighlight:
-            'Click on any node in the list to highlight it in the workflow'
+            "Click on any node in the list to highlight it in the workflow"
         }
       }
     }
@@ -75,11 +75,11 @@ void i18n
     debug: true,
 
     // Fallback language
-    fallbackLng: 'en',
+    fallbackLng: "en",
 
     // Namespace for translations
-    ns: ['main'],
-    defaultNS: 'main',
+    ns: ["main"],
+    defaultNS: "main",
 
     // Do not load from bundled resources first
     initImmediate: true,
@@ -93,7 +93,7 @@ void i18n
     // Language detection configuration
     detection: {
       // Order of detection methods
-      order: ['navigator', 'htmlTag', 'path', 'subdomain'],
+      order: ["navigator", "htmlTag", "path", "subdomain"],
       // Don't cache detected language
       caches: []
     },
@@ -101,7 +101,7 @@ void i18n
     // Backend configuration
     backend: {
       // Path to load translations from
-      loadPath: '/locales/{{lng}}/{{ns}}.json',
+      loadPath: "/locales/{{lng}}/{{ns}}.json",
       // Add retry logic
       requestOptions: {
         retry: 3,
@@ -121,7 +121,7 @@ void i18n
   })
 
 // Add fallback resources only if HTTP loading fails
-i18n.on('failedLoading', (lng, ns) => {
+i18n.on("failedLoading", (lng, ns) => {
   console.log(
     `Failed loading translation file for ${lng} and ${ns}, using fallback`
   )
