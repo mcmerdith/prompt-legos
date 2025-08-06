@@ -1,5 +1,8 @@
 import React from "react"
 
+import { type Prompt, defaultPrompt } from "@/lib/prompt"
+import { usePromptCreatorStore } from "@/stores/prompt-creator-store"
+
 import { addReactWidget } from "../utils/react-wrapper"
 import { app } from "../utils/shims"
 
@@ -10,20 +13,49 @@ export function registerWidgets() {
   app.registerExtension({
     name: "PromptLegos.PromptWidget",
 
-    nodeCreated(node) {
-      console.debug("Node created", node.title, node.type, node)
-      if (node.title === "Bruh Node") {
-        addReactWidget(node, "lego-brick-widget", <PromptWidget />, {
-          getValue(): string {
-            return "temp"
-          },
-          setValue(_value: string) {
-            // todo
-          },
-          getMinHeight() {
-            return 200
+    setup() {
+      const originalOnNodeRemoved = app.graph.onNodeRemoved
+      app.graph.onNodeRemoved = (node) => {
+        originalOnNodeRemoved?.apply(app.graph, [node])
+        if (node.comfyClass === "PromptLegosPrompt") {
+          console.debug("Removing prompt editor for node", node.id)
+          usePromptCreatorStore.setState((state) => {
+            const newEditors = { ...state.editors }
+            delete newEditors[node.id]
+
+            return {
+              editors: newEditors
+            }
+          })
+        }
+      }
+    },
+
+    getCustomWidgets() {
+      return {
+        LEGO_PROMPT: (node, inputName) => {
+          const widget = addReactWidget(
+            node,
+            inputName,
+            <PromptWidget node={node} />,
+            {
+              getValue(): Prompt {
+                return defaultPrompt()
+              },
+              setValue(_value: Prompt) {
+                // todo
+              },
+              getMinHeight() {
+                return 200
+              }
+            }
+          )
+
+          return {
+            widget: widget,
+            minHeight: widget.options.getMinHeight?.()
           }
-        })
+        }
       }
     }
   })

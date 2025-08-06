@@ -1,6 +1,8 @@
+import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react"
 import path from "path"
 import { defineConfig } from "vite"
+
 
 interface RewriteComfyImportsOptions {
   isDev: boolean
@@ -26,7 +28,11 @@ const rewriteComfyImports = ({ isDev }: RewriteComfyImportsOptions) => {
 }
 
 export default defineConfig(({ mode }) => ({
-  plugins: [react(), rewriteComfyImports({ isDev: mode === "development" })],
+  plugins: [
+    react(),
+    tailwindcss(),
+    rewriteComfyImports({ isDev: mode === "development" })
+  ],
 
   resolve: {
     alias: {

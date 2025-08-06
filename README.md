@@ -1,20 +1,11 @@
-# ComfyUI React Extension Template
+# Prompt Legos
 
-![react-example-demo](https://github.com/Comfy-Org/ComfyUI-React-Extension-Template/blob/assets-branch/docs/demo.gif)
-
-![demo pic](https://github.com/Comfy-Org/ComfyUI-React-Extension-Template/blob/assets-branch/react-example-demo.png)
-
-A minimal template for creating React/TypeScript frontend extensions for ComfyUI, with complete boilerplate setup.
-
-📚 **[ComfyUI JavaScript Developer Documentation](https://docs.comfy.org/custom-nodes/js/javascript_overview)** - Learn how to use ComfyUI's powerful extension APIs.
+TODO: description
 
 ## Features
 
-- **React & TypeScript Integration**: Ready-to-use setup for creating modern UI components within ComfyUI
+- **Fully Integrated**: All utilities are built directly into ComfyUI. No extra tabs.
 - **Internationalization Framework**: Built-in i18n support with English and Chinese examples
-- **ComfyUI API Integration**: Properly typed access to ComfyUI's internal API
-- **Full TypeScript Support**: Type-safe code using ComfyUI's official type definitions
-- **Auto-Reload Development**: Watch mode for seamless development experience
 
 ## Installation
 
@@ -23,7 +14,7 @@ A minimal template for creating React/TypeScript frontend extensions for ComfyUI
 The easiest way to install this extension is through the ComfyUI Manager:
 
 1. Open ComfyUI and go to the Manager
-2. Search for "React Extension Template"
+2. Search for "Prompt Legos"
 3. Click Install
 
 ### Manual Installation
@@ -35,10 +26,10 @@ If you want to install directly from GitHub for development purposes:
 cd ComfyUI/custom_nodes
 
 # Clone the repository
-git clone https://github.com/Comfy-Org/ComfyUI-React-Extension-Template.git
+git clone https://github.com/mcmerdith/prompt-legos
 
 # Build the React application
-cd ComfyUI-React-Extension-Template/ui
+cd prompt-legos/ui
 npm install
 npm run build
 
@@ -47,19 +38,24 @@ npm run build
 
 ⚠️ **Important**: When installing manually from GitHub, you **must** run `npm run build` in the `ui/` directory before the extension will work. The extension requires the compiled React code in the `dist/` folder to function properly in ComfyUI.
 
-## Usage
-
-This template includes a simple example extension that displays workflow node statistics. After installation:
-
-1. Look for the "React Example" tab in the ComfyUI sidebar
-2. Click to open the example UI
-
-When developing your own extension, you can:
-1. Replace the example UI in App.tsx with your own components
-2. Update the tab title and icon in main.tsx
-3. Customize the extension's appearance and behavior
-
 ## Development
+
+### Quickstart
+
+1. Install [ComfyUI](https://docs.comfy.org/get_started).
+1. Install [ComfyUI-Manager](https://github.com/ltdrdata/ComfyUI-Manager)
+1. Look up this extension in ComfyUI-Manager. If you are installing manually, clone this repository under `ComfyUI/custom_nodes`.
+1. Restart ComfyUI.
+
+To install the dev dependencies and pre-commit (will run the ruff hook), do:
+
+```bash
+cd my_custom_nodepack
+pip install -e .[dev]
+pre-commit install
+```
+
+The `-e` flag above will result in a "live" install, in the sense that any changes you make to your node extension will automatically be picked up the next time you run ComfyUI.
 
 ### Setup Development Environment
 
@@ -72,61 +68,6 @@ npm install
 
 # Start development mode (watches for changes)
 npm run watch
-```
-
-### Available ComfyUI Extension APIs
-
-This template provides access to ComfyUI's powerful JavaScript APIs through the official type definitions. You can use these APIs to build rich extensions:
-
-- **Sidebar Tabs**: Create custom sidebar panels like this template demonstrates
-- **Bottom Bar Panels**: Add panels to the bottom of the UI
-- **Top Menu Items**: Add custom entries to the top menu
-- **Context Menus**: Create custom context menus for the graph
-- **Settings**: Add settings to the ComfyUI settings panel
-- **Toasts**: Display notification messages
-- **Commands**: Create and register custom commands
-- **Hotkeys/Keybindings**: Register custom keyboard shortcuts
-- **About Panel Badges**: Add badges to the about panel
-- **App Events**: Listen to and respond to app events
-- **Graph Manipulation**: Programmatically manipulate the workflow graph
-
-For comprehensive documentation on all available APIs, see the [ComfyUI JavaScript Developer Documentation](https://docs.comfy.org/custom-nodes/js/javascript_overview).
-
-### File Structure
-
-```
-ComfyUI-React-Extension-Template/
-├── .github/                    # GitHub configurations
-│   └── workflows/
-│       └── react-build.yml     # Automatic build and publishing workflow
-├── __init__.py                 # Python entry point for ComfyUI integration
-├── pyproject.toml              # Project metadata for ComfyUI Registry
-├── dist/                       # Built extension files (generated)
-└── ui/                         # React application
-    ├── public/
-    │   └── locales/            # Internationalization files
-    │       ├── en/
-    │       │   └── main.json   # English translations
-    │       └── zh/
-    │           └── main.json   # Chinese translations
-    ├── src/
-    │   ├── App.tsx             # Main React component with example UI
-    │   ├── App.css             # Styles for the example UI
-    │   ├── index.css           # Global styles and theme variables
-    │   ├── main.tsx            # Entry point for React app
-    │   ├── vite-env.d.ts       # Vite environment types
-    │   ├── setupTests.ts       # Testing environment setup
-    │   ├── __tests__/          # Unit tests for components
-    │   │   └── dummy.test.tsx  # Example test
-    │   └── utils/
-    │       └── i18n.ts         # Internationalization setup
-    ├── eslint.config.js        # ESLint configuration
-    ├── jest.config.js          # Jest testing configuration
-    ├── jest.setup.js           # Jest setup file
-    ├── package.json            # npm dependencies
-    ├── tsconfig.json           # TypeScript configuration
-    ├── tsconfig.node.json      # TypeScript configuration for Node
-    └── vite.config.ts          # Build configuration
 ```
 
 ### TypeScript Support
@@ -207,22 +148,6 @@ Example tests can be found in the `src/__tests__` directory. The setup includes:
 - Jest for running tests
 - React Testing Library for testing components
 - Mock implementation of the ComfyUI window.app object
-
-## Resources
-
-- [ComfyUI JS Extension Documentation](https://docs.comfy.org/custom-nodes/js/javascript_overview) - Official documentation for ComfyUI JavaScript Extensions
-- [ComfyUI Registry Documentation](https://docs.comfy.org/registry/publishing) - Learn how to publish your extension
-- [ComfyUI Frontend Repository](https://github.com/Comfy-Org/ComfyUI-Frontend) - The main ComfyUI frontend codebase
-- [Official ComfyUI Frontend Types](https://www.npmjs.com/package/@comfyorg/comfyui-frontend-types) - TypeScript definitions for ComfyUI
-- [React Extension Guide](REACT_EXTENSION_GUIDE.md) - Detailed guide for creating React extensions
-- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
-- [React Documentation](https://react.dev/reference/react)
-- [Jest Documentation](https://jestjs.io/docs/getting-started)
-- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
-
-## Contributing
-
-Contributions are welcome! Feel free to open issues or submit pull requests to improve this template.
 
 ## License
 

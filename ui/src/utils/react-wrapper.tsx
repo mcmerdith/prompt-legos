@@ -7,21 +7,26 @@ import type { LGraphNode } from "@comfyorg/litegraph"
 import React, { Suspense } from "react"
 import ReactDOM from "react-dom/client"
 
-function createReactApp<T extends React.ReactElement>(
-  name: string,
-  element: T
-) {
-  const root = document.createElement("div")
-  root.className = `prompt-lego-widget-root`
-  root.id = `${name}-root`
+import { cn } from "@/lib/utils"
 
-  ReactDOM.createRoot(root).render(
+function createReactApp<T extends React.ReactElement>(
+  id: string,
+  reactElement: T,
+  className?: string,
+  htmlRoot?: HTMLElement
+) {
+  htmlRoot ??= document.createElement("div")
+  htmlRoot.className = cn("prompt-legos-react-app", className)
+  htmlRoot.id = id
+
+  const reactRoot = ReactDOM.createRoot(htmlRoot)
+  reactRoot.render(
     <React.StrictMode>
-      <Suspense fallback={<div>Loading...</div>}>{element}</Suspense>
+      <Suspense fallback={<div>Loading...</div>}>{reactElement}</Suspense>
     </React.StrictMode>
   )
 
-  return root
+  return { htmlRoot, reactRoot }
 }
 
 export function addReactWidget<
@@ -30,15 +35,11 @@ export function addReactWidget<
 >(
   node: LGraphNode,
   name: string,
-  element: T,
+  reactElement: T,
   options: DOMWidgetOptions<V> = {}
 ): DOMWidget<HTMLElement, V> {
-  const widget = node.addDOMWidget(
-    name,
-    "custom",
-    createReactApp(name, element),
-    options
-  )
+  const { htmlRoot } = createReactApp(name, reactElement)
+  const widget = node.addDOMWidget(name, "custom", htmlRoot, options)
 
   return widget
 }
@@ -46,15 +47,19 @@ export function addReactWidget<
 export function createReactBottomPanelTab<T extends React.ReactElement>(
   name: string,
   id: string,
-  element: T
+  reactElement: T
 ): BottomPanelExtension {
   const bottomPanelTab: BottomPanelExtension = {
     id: id,
     title: name,
     type: "custom",
-    render: (el) => {
-      const bottomPanelApp = createReactApp(name, element)
-      el.appendChild(bottomPanelApp)
+    render: (rootElement) => {
+      createReactApp(
+        id,
+        reactElement,
+        "pl:flex pl:h-full pl:flex-col",
+        rootElement
+      )
     }
   }
   return bottomPanelTab

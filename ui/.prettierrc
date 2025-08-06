@@ -18,7 +18,15 @@
       "excludeFiles": "src/utils/shims.ts",
       "options": {
         "plugins": [
-          "@trivago/prettier-plugin-sort-imports"
+            "@trivago/prettier-plugin-sort-imports",
+            "prettier-plugin-tailwindcss"
+        ],
+          "tailwindStylesheet": "./src/index.css",
+          "tailwindFunctions": [
+              "clsx",
+              "cn",
+              "twMerge",
+              "cva"
         ]
       }
     }
