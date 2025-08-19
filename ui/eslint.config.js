@@ -1,5 +1,7 @@
 import pluginJs from "@eslint/js"
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
+import react from "eslint-plugin-react"
+import reactHooks from "eslint-plugin-react-hooks"
 import unusedImports from "eslint-plugin-unused-imports"
 import globals from "globals"
 import tseslint from "typescript-eslint"
@@ -24,16 +26,18 @@ export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   eslintPluginPrettierRecommended,
+  reactHooks.configs["recommended-latest"],
   {
     plugins: {
-      "unused-imports": unusedImports
+      "unused-imports": unusedImports,
+      react: react
     },
     rules: {
       "@typescript-eslint/no-floating-promises": "error",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/prefer-as-const": "off",
-      "unused-imports/no-unused-imports": "error",
+      "unused-imports/no-unused-imports": "warn",
       "prettier/prettier": "warn"
     }
   }

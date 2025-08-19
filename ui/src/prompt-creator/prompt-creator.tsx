@@ -1,8 +1,7 @@
-import { usePromptEditor } from "@/lib/prompt"
+import LegoPromptEditor from "@/components/prompt"
+import { isInitializedEditor, usePromptEditor } from "@/lib/use-prompt-editor"
 import { cn } from "@/lib/utils"
-import { usePromptCreatorStore } from "@/stores/prompt-creator-store"
-
-import PromptComponent from "../components/prompt"
+import { usePromptStore } from "@/stores/prompt-store"
 
 // Create a React component for the tab content
 export default function PromptCreator({
@@ -10,20 +9,17 @@ export default function PromptCreator({
 }: {
   layout?: "col" | "row"
 }) {
-  const activeNode = usePromptCreatorStore((state) => state.activeNode)
+  const activeNode = usePromptStore((state) => state.activeNode)
+  const editor = usePromptEditor(activeNode ?? "undefined")
 
-  if (!activeNode) {
-    return <div>No active node</div>
+  if (!isInitializedEditor(editor)) {
+    return <div>No active editor</div>
   }
-
-  const editor = usePromptEditor(activeNode)
-
-  const { positive, negative } = editor.prompt
 
   return (
     <div className="pl:flex pl:h-0 pl:w-full pl:flex-grow pl:flex-col pl:items-center pl:justify-start pl:gap-4 pl:overflow-y-scroll pl:p-4">
       <h3>
-        Editing {editor.name} ({activeNode})
+        Editing {editor.editorName} ({activeNode})
       </h3>
       <div
         className={cn(
@@ -33,18 +29,7 @@ export default function PromptCreator({
             : "pl:flex-col pl:items-stretch pl:justify-start"
         )}
       >
-        <PromptComponent
-          className="pl:flex-auto"
-          sections={positive}
-          name="Positive"
-          edit
-        />
-        <PromptComponent
-          className="pl:flex-auto"
-          sections={negative}
-          name="Negative"
-          edit
-        />
+        <LegoPromptEditor editor={editor} edit />
       </div>
     </div>
   )

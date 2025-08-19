@@ -1,13 +1,8 @@
-import type {
-  BottomPanelExtension,
-  DOMWidget,
-  DOMWidgetOptions
-} from "@comfyorg/comfyui-frontend-types"
-import type { LGraphNode } from "@comfyorg/litegraph"
+import { cn } from "@/lib/utils"
+import type { LGraphNode } from "@/utils/shims"
+import type { BottomPanelExtension, DOMWidget, DOMWidgetOptions } from "@comfyorg/comfyui-frontend-types"
 import React, { Suspense } from "react"
 import ReactDOM from "react-dom/client"
-
-import { cn } from "@/lib/utils"
 
 function createReactApp<T extends React.ReactElement>(
   id: string,
@@ -38,8 +33,17 @@ export function addReactWidget<
   reactElement: T,
   options: DOMWidgetOptions<V> = {}
 ): DOMWidget<HTMLElement, V> {
-  const { htmlRoot } = createReactApp(name, reactElement)
+  const { htmlRoot, reactRoot } = createReactApp(name, reactElement)
+
+  // add the created widget
   const widget = node.addDOMWidget(name, "custom", htmlRoot, options)
+
+  // make sure we cleanup when we're done
+  const originalOnRemoved = node.onRemoved
+  node.onRemoved = () => {
+    originalOnRemoved?.apply(node)
+    reactRoot.unmount()
+  }
 
   return widget
 }
@@ -49,18 +53,31 @@ export function createReactBottomPanelTab<T extends React.ReactElement>(
   id: string,
   reactElement: T
 ): BottomPanelExtension {
-  const bottomPanelTab: BottomPanelExtension = {
+  let app: ReactDOM.Root | undefined
+
+  return {
     id: id,
     title: name,
     type: "custom",
-    render: (rootElement) => {
-      createReactApp(
+    render(rootElement) {
+      // hack for ComfyUI_frontend#4372
+      // destroy isn't always called so at least make sure we clean up the old
+      // panel before creating a new one
+      app?.unmount()
+
+      // mount app and store reference to the react root
+      const { reactRoot } = createReactApp(
         id,
         reactElement,
         "pl:flex pl:h-full pl:flex-col",
         rootElement
       )
+      app = reactRoot
+    },
+    destroy() {
+      // clean up the app
+      app?.unmount()
+      app = undefined
     }
   }
-  return bottomPanelTab
 }

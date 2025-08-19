@@ -1,34 +1,33 @@
 {
-  "singleQuote": false,
-  "tabWidth": 2,
-  "semi": false,
-  "trailingComma": "none",
-  "printWidth": 80,
-  "importOrder": [
-    "^@core/(.*)$",
-    "<THIRD_PARTY_MODULES>",
-    "^@/(.*)$",
-    "^[./]"
-  ],
-  "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true,
-  "overrides": [
-    {
-      "files": "*.{js,cjs,mjs,ts,cts,mts,tsx,vue}",
-      "excludeFiles": "src/utils/shims.ts",
-      "options": {
-        "plugins": [
-            "@trivago/prettier-plugin-sort-imports",
-            "prettier-plugin-tailwindcss"
-        ],
-          "tailwindStylesheet": "./src/index.css",
-          "tailwindFunctions": [
-              "clsx",
-              "cn",
-              "twMerge",
-              "cva"
-        ]
-      }
-    }
-  ]
+    "singleQuote": false,
+    "tabWidth": 2,
+    "semi": false,
+    "trailingComma": "none",
+    "printWidth": 80,
+    "importOrder": [
+        "^@core/(.*)$",
+        "<THIRD_PARTY_MODULES>",
+        "^@/(.*)$",
+        "^[./]"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true,
+    "overrides": [
+        {
+            "files": "*.{js,cjs,mjs,ts,cts,mts,tsx,vue}",
+            "excludeFiles": "src/utils/shims.ts",
+            "options": {
+                "plugins": [
+                    "prettier-plugin-tailwindcss"
+                ],
+                "tailwindStylesheet": "./src/index.css",
+                "tailwindFunctions": [
+                    "clsx",
+                    "cn",
+                    "twMerge",
+                    "cva"
+                ]
+            }
+        }
+    ]
 }

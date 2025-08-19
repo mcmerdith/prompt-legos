@@ -3,7 +3,6 @@ import react from "@vitejs/plugin-react"
 import path from "path"
 import { defineConfig } from "vite"
 
-
 interface RewriteComfyImportsOptions {
   isDev: boolean
 }
@@ -41,12 +40,20 @@ export default defineConfig(({ mode }) => ({
   },
 
   build: {
+    watch: {
+      include: ["src/**"],
+      exclude: ["node_modules/**", "dist/**", ".git/**", ".idea/**"],
+      chokidar: {
+        atomic: true
+      }
+    },
+    sourcemap: true,
     emptyOutDir: true,
     rollupOptions: {
       // Don't bundle ComfyUI scripts - they will be loaded from the ComfyUI server
       external: ["/scripts/app.js", "/scripts/api.js"],
       input: {
-        main: path.resolve(__dirname, "src/main.tsx")
+        main: path.resolve(__dirname, "src/main.ts")
       },
       output: {
         // Output to the dist/example_ext directory

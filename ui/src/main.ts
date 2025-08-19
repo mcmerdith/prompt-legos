@@ -1,13 +1,13 @@
 import { registerPromptCreator } from "./prompt-creator"
+import { registerPromptWidget } from "./prompt-widget"
 import { registerSidebar } from "./sidebar-tab"
 import "./utils/i18n"
 import { app } from "./utils/shims"
-import { registerWidgets } from "./widgets"
 
 void import("./index.css")
 
 registerSidebar()
-registerWidgets()
+registerPromptWidget()
 registerPromptCreator()
 
 try {
