@@ -40,7 +40,7 @@ class PromptLegosPrompt(ComfyNodeABC):
 
     @staticmethod
     def build_prompt(lego_prompt: dict, force_case: str, **kwargs):
-        log("[warning] got unexpected kwargs", kwargs)
+        log(f"[warning] got unexpected kwargs, {kwargs}")
         positive, negative = build_prompt(lego_prompt, force_case)
         return positive, negative
 
