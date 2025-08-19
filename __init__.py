@@ -12,46 +12,54 @@ __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
 workspace_path = os.path.dirname(__file__)
 dist_path = os.path.join(workspace_path, "dist/prompt-legos")
 dist_locales_path = os.path.join(workspace_path, "dist/locales")
+project_name = os.path.basename(workspace_path)
+
+
+def log(msg):
+    print(f"[{project_name}] {msg}")
+
+
+# dynamically load project name
+try:
+    # Method added in https://github.com/comfyanonymous/ComfyUI/pull/8357
+    from comfy_config import config_parser
+
+    project_config = config_parser.extract_node_configuration(
+        workspace_path)
+    if not project_config:
+        raise Exception("Configuration not found")
+    project_name = project_config.project.name
+except Exception as e:
+    log(
+        f"Could not load project config, using default name '{project_name}': {e}")
 
 # Print the current paths for debugging
-print(f"ComfyUI_example_frontend_extension workspace path: {workspace_path}")
-print(f"Dist path: {dist_path}")
-print(f"Dist locales path: {dist_locales_path}")
-print(f"Locales exist: {os.path.exists(dist_locales_path)}")
+# log(f"workspace path: {workspace_path}")
+# log(f"dist path: {dist_path}")
+# log(f"dist locales path: {dist_locales_path}")
+# log(f"locales exist: {os.path.exists(dist_locales_path)}")
 
 # Register the static route for serving our React app assets
-if os.path.exists(dist_path):
-    # Add the routes for the extension
-    server.PromptServer.instance.app.add_routes([
-        web.static("/prompt-legos/", dist_path),
-    ])
-
-    # Register the locale files route
-    if os.path.exists(dist_locales_path):
-        server.PromptServer.instance.app.add_routes([
-            web.static("/locales/", dist_locales_path),
-        ])
-        print(f"Registered locale files route at /locales/")
-    else:
-        print("WARNING: Locale directory not found!")
-
-    # Also register the standard ComfyUI extension web directory
-
-    project_name = os.path.basename(workspace_path)
-
-    try:
-        # Method added in https://github.com/comfyanonymous/ComfyUI/pull/8357
-        from comfy_config import config_parser
-
-        project_config = config_parser.extract_node_configuration(
-            workspace_path)
-        project_name = project_config.project.name
-        print(f"project name read from pyproject.toml: {project_name}")
-    except Exception as e:
-        print(
-            f"Could not load project config, using default name '{project_name}': {e}")
-
-    nodes.EXTENSION_WEB_DIRS[project_name] = os.path.join(
-        workspace_path, "dist")
+if server.PromptServer.instance.app.frozen:
+    log("WARN: loaded while router is frozen. If using hot-reload, this is expected.")
 else:
-    print("ComfyUI Example React Extension: Web directory not found")
+    if os.path.exists(dist_path):
+
+        # Add the routes for the extension
+        server.PromptServer.instance.app.add_routes([
+            web.static("/prompt-legos/", dist_path),
+        ])
+
+        # Register the locale files route
+        if os.path.exists(dist_locales_path):
+            server.PromptServer.instance.app.add_routes([
+                web.static("/locales/", dist_locales_path),
+            ])
+            log(f"Registered locale files route at /locales/")
+        else:
+            log("WARNING: Locale directory not found!")
+
+        nodes.EXTENSION_WEB_DIRS[project_name] = os.path.join(
+            workspace_path, "dist")
+    else:
+        log("ERROR: web directory not found")
