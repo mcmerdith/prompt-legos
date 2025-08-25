@@ -1,6 +1,6 @@
 from typing import Any
 
-from .lib import require_dict_key, find_by_id, PromptBuildError
+from .lib import log, require_dict_key, find_by_id, PromptBuildError
 
 
 def weighted_value(value: list[str | None] | str, weight=1.0):
@@ -62,6 +62,7 @@ def build_single_prompt(single_prompt: Any, force_case: str):
         weighted_sections.append(weighted_value(weighted_groups, section_weight))
     built_prompt = weighted_value(weighted_sections, 1)
 
+    log(f"built prompt: {built_prompt}")
     if built_prompt is None:
         return ""
     else:
