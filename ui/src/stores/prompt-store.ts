@@ -1,6 +1,6 @@
 import { LegoPrompt } from "@/lib/prompt"
 import { fatal, warn } from "@/lib/toast"
-import type { NodeId } from "@comfyorg/litegraph"
+import type { NodeId } from "@/utils/shims"
 import { WritableDraft } from "immer"
 import z from "zod/v4"
 import { create } from "zustand"
@@ -53,16 +53,7 @@ export const usePromptStore = create<PromptStoreState>()(
       {
         name: "prompt-store",
         version: 1,
-        onRehydrateStorage: (state) => {
-          console.log("rehydrate storage", state)
-          return (state, error) => {
-            console.log("done", state)
-            if (error) console.error("error", error)
-          }
-        },
         merge: (persistedState, currentState) => {
-          console.log("merging", persistedState, currentState)
-
           const validated = PromptStoreData.safeParse(persistedState)
           if (!validated.success) {
             warn("Invalid prompt store, re-initializing...", undefined, {

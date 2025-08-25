@@ -1,6 +1,7 @@
 import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react"
 import path from "path"
+import { visualizer } from "rollup-plugin-visualizer"
 import { defineConfig } from "vite"
 
 interface RewriteComfyImportsOptions {
@@ -26,11 +27,19 @@ const rewriteComfyImports = ({ isDev }: RewriteComfyImportsOptions) => {
   }
 }
 
+function chunk(id: string, modules: string[]) {
+  for (const module of modules) {
+    if (id.includes(`/${module}`)) return true
+  }
+  return false
+}
+
 export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     tailwindcss(),
-    rewriteComfyImports({ isDev: mode === "development" })
+    rewriteComfyImports({ isDev: mode === "development" }),
+    visualizer()
   ],
 
   resolve: {
@@ -47,7 +56,7 @@ export default defineConfig(({ mode }) => ({
         atomic: true
       }
     },
-    sourcemap: true,
+    // sourcemap: true,
     emptyOutDir: true,
     rollupOptions: {
       // Don't bundle ComfyUI scripts - they will be loaded from the ComfyUI server
@@ -62,8 +71,11 @@ export default defineConfig(({ mode }) => ({
         chunkFileNames: "prompt-legos/[name]-[hash].js",
         assetFileNames: "prompt-legos/[name][extname]",
         // Split React into a separate vendor chunk for better caching
-        manualChunks: {
-          vendor: ["react", "react-dom"]
+        manualChunks(id: string) {
+          if (chunk(id, ["@dnd-kit"])) return "dnd-kit"
+          if (chunk(id, ["zod"])) return "zod"
+          if (id.includes("node_modules")) return "vendor"
+          return null
         }
       }
     }

@@ -87,7 +87,7 @@ void i18n
     // Custom handling for missing keys
     saveMissing: true,
     missingKeyHandler: (lng, ns, key) => {
-      console.log(`Missing translation: [${lng}] ${ns}:${key}`)
+      console.warn(`Missing translation: [${lng}] ${ns}:${key}`)
     },
 
     // Language detection configuration
@@ -122,7 +122,7 @@ void i18n
 
 // Add fallback resources only if HTTP loading fails
 i18n.on("failedLoading", (lng, ns) => {
-  console.log(
+  console.error(
     `Failed loading translation file for ${lng} and ${ns}, using fallback`
   )
 

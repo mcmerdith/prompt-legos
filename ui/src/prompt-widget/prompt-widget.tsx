@@ -1,8 +1,8 @@
-import LegoPromptEditor from "@/components/prompt"
+import { LegoPromptViewer } from "@/components/prompt-editor"
 import { isInitializedEditor, usePromptEditor } from "@/lib/use-prompt-editor"
 import { usePromptStore } from "@/stores/prompt-store"
-import type { LGraphNode } from "@/utils/shims"
 import { app } from "@/utils/shims"
+import type { LGraphNode } from "@comfyorg/comfyui-frontend-types"
 
 export default function PromptWidget({ node }: { node: LGraphNode }) {
   const editor = usePromptEditor(node.id)
@@ -12,7 +12,7 @@ export default function PromptWidget({ node }: { node: LGraphNode }) {
   return (
     <div className="pl:flex pl:h-full pl:flex-col">
       <main className="pl:flex-grow pl:overflow-y-scroll">
-        <LegoPromptEditor editor={editor} edit={false} />
+        <LegoPromptViewer prompt={editor.value} />
       </main>
       <footer className="pl:flex pl:flex-col pl:items-start pl:justify-center pl:gap-2 pl:pt-1">
         <button

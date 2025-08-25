@@ -1,4 +1,4 @@
-import type { NodeId } from "@comfyorg/litegraph"
+import type { NodeId } from "@/utils/shims"
 
 import { api } from "./shims"
 

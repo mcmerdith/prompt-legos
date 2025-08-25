@@ -1,4 +1,5 @@
-import LegoPromptEditor from "@/components/prompt"
+import LegoPromptEditor from "@/components/prompt-editor"
+import { EditorContextProvider } from "@/lib/use-editor-context"
 import { isInitializedEditor, usePromptEditor } from "@/lib/use-prompt-editor"
 import { cn } from "@/lib/utils"
 import { usePromptStore } from "@/stores/prompt-store"
@@ -29,7 +30,9 @@ export default function PromptCreator({
             : "pl:flex-col pl:items-stretch pl:justify-start"
         )}
       >
-        <LegoPromptEditor editor={editor} edit />
+        <EditorContextProvider value={editor}>
+          <LegoPromptEditor editor={editor} />
+        </EditorContextProvider>
       </div>
     </div>
   )

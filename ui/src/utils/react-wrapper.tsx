@@ -1,6 +1,10 @@
 import { cn } from "@/lib/utils"
-import type { LGraphNode } from "@/utils/shims"
-import type { BottomPanelExtension, DOMWidget, DOMWidgetOptions } from "@comfyorg/comfyui-frontend-types"
+import type {
+  BottomPanelExtension,
+  DOMWidget,
+  DOMWidgetOptions,
+  LGraphNode
+} from "@comfyorg/comfyui-frontend-types"
 import React, { Suspense } from "react"
 import ReactDOM from "react-dom/client"
 

@@ -46,10 +46,9 @@ export function registerPromptWidget() {
           const originalOnAdded = node.onAdded
           node.onAdded = function (graph) {
             originalOnAdded?.apply(node, [graph])
-            console.log(node.id, state.values)
+            console.debug(node.id, "onAdded", state.values)
             if (!state.values[node.id])
               state.create(node.id, {
-                id: "PROMPT",
                 prompts: segments.map((segment) => createSinglePrompt(segment))
               })
           }
@@ -64,7 +63,7 @@ export function registerPromptWidget() {
               },
               setValue(_value: LegoPrompt) {
                 // todo
-                console.log("setValue called", _value)
+                console.debug(node.id, "setValue called", _value)
               },
               getMinHeight() {
                 return 200
