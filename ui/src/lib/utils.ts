@@ -1,9 +1,10 @@
-import type { NodeId } from "@/utils/shims";
-import { app } from "@/utils/shims";
 import type { LGraphNode } from "@comfyorg/comfyui-frontend-types";
-import { type ClassValue, clsx } from "clsx";
+import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod/v4";
+
+import type { NodeId } from "@/utils/shims";
+import { app } from "@/utils/shims";
 
 export { v4 as uuid } from "uuid";
 

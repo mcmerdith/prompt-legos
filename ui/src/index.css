@@ -17,7 +17,7 @@
 @utility slick-number-input {
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
-        @apply pl:appearance-none pl:m-0;
+        @apply pl:m-0 pl:appearance-none;
     }
 }
 

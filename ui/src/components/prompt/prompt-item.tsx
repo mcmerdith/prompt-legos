@@ -58,7 +58,7 @@ export function PromptItemEditor({
     >
       <input
         autoFocus={autofocusInputId === item.id}
-        className="pl:field-sizing-content pl:selection:bg-background pl:selection:text-foreground pl:outline-offset-2 pl:px-0.5"
+        className="pl:field-sizing-content pl:px-0.5 pl:outline-offset-2 pl:selection:bg-background pl:selection:text-foreground"
         value={item.value}
         placeholder={"new value"}
         onKeyDown={(event) => keydownHandler(event, index)}
@@ -77,7 +77,7 @@ export function PromptItemEditor({
       />
       <input
         className={
-          "pl:field-sizing-content pl:text-2xs pl:selection:bg-background pl:selection:text-foreground pl:slick-number-input pl:outline-offset-2 pl:px-0.5"
+          "pl:slick-number-input pl:field-sizing-content pl:px-0.5 pl:text-2xs pl:outline-offset-2 pl:selection:bg-background pl:selection:text-foreground"
         }
         type={"number"}
         value={item.weight}

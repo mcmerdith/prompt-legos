@@ -1,6 +1,7 @@
+import React from "react";
+
 import { createReactBottomPanelTab } from "@/utils/react-wrapper";
 import { app } from "@/utils/shims";
-import React from "react";
 
 const PromptCreator = React.lazy(() => import("./prompt-creator"));
 

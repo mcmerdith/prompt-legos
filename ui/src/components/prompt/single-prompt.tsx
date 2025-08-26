@@ -1,3 +1,6 @@
+import { Plus } from "lucide-react";
+import React from "react";
+
 import {
   PromptSectionEditor,
   PromptSectionViewer,
@@ -5,8 +8,6 @@ import {
 import { getLabel, SinglePrompt } from "@/lib/prompt";
 import { error } from "@/lib/toast";
 import type { Editor } from "@/lib/use-prompt-editor";
-import { Plus } from "lucide-react";
-import React from "react";
 
 function Wrapper({ id, children }: { id: string; children?: React.ReactNode }) {
   return (

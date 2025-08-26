@@ -1,7 +1,8 @@
+import type { LGraphNode } from "@comfyorg/comfyui-frontend-types";
+
 import { LegoPromptViewer } from "@/components/prompt-editor";
 import { usePromptStore } from "@/stores/prompt-store";
 import { app } from "@/utils/shims";
-import type { LGraphNode } from "@comfyorg/comfyui-frontend-types";
 
 export default function PromptWidget({ node }: { node: LGraphNode }) {
   const setActiveEditor = usePromptStore((state) => state.setActiveEditor);

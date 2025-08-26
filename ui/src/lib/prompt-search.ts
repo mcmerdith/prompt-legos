@@ -1,11 +1,12 @@
+import z from "zod/v4";
+
 import {
   LegoPrompt,
   PromptGroup,
   PromptItem,
-  type PromptSection,
   SinglePrompt,
+  type PromptSection,
 } from "@/lib/prompt";
-import z from "zod/v4";
 
 export const PromptPath = z.object({
   promptId: z.string(),

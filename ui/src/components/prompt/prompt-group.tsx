@@ -1,3 +1,5 @@
+import { PlusIcon, Trash } from "lucide-react";
+
 import { DraggablePromptComponent } from "@/components/prompt-dnd";
 import {
   PromptItemEditor,
@@ -10,7 +12,6 @@ import { UnifiedInputContextProvider } from "@/lib/use-editor-context";
 import type { Editor } from "@/lib/use-prompt-editor";
 import { useUnifiedInput } from "@/lib/use-unified-input";
 import { cn } from "@/lib/utils";
-import { PlusIcon, Trash } from "lucide-react";
 
 import { PromptComponentPathProps } from "./component-props";
 

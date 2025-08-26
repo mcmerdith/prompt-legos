@@ -1,3 +1,15 @@
+import { Draggable } from "@dnd-kit/dom";
+import {
+  DragDropProvider,
+  DragOverlay,
+  KeyboardSensor,
+  PointerSensor,
+  useDraggable,
+  useDroppable,
+} from "@dnd-kit/react";
+import React, { ComponentPropsWithoutRef } from "react";
+import z from "zod/v4";
+
 import { PromptGroupViewer } from "@/components/prompt/prompt-group";
 import { PromptItemViewer } from "@/components/prompt/prompt-item";
 import { PromptSectionViewer } from "@/components/prompt/prompt-section";
@@ -11,17 +23,6 @@ import { error } from "@/lib/toast";
 import { InitializedEditor } from "@/lib/use-prompt-editor";
 import { cn } from "@/lib/utils";
 import { usePromptStore } from "@/stores/prompt-store";
-import { Draggable } from "@dnd-kit/dom";
-import {
-  DragDropProvider,
-  DragOverlay,
-  KeyboardSensor,
-  PointerSensor,
-  useDraggable,
-  useDroppable,
-} from "@dnd-kit/react";
-import React, { ComponentPropsWithoutRef } from "react";
-import z from "zod/v4";
 
 const DragDropData = z.union([
   z.object({

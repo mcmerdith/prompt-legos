@@ -1,8 +1,9 @@
 // @ts-expect-error external file
+import { ComfyApi, ComfyApp } from "@comfyorg/comfyui-frontend-types";
+
 import { api } from "/scripts/api.js";
 // @ts-expect-error external file
 import { app } from "/scripts/app.js";
-import { ComfyApi, ComfyApp } from "@comfyorg/comfyui-frontend-types";
 
 export type NodeId = string | number;
 

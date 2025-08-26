@@ -1,3 +1,6 @@
+import { Plus, Trash } from "lucide-react";
+
+import { DraggablePromptComponent } from "@/components/prompt-dnd";
 import {
   PromptGroupEditor,
   PromptGroupViewer,
@@ -6,29 +9,21 @@ import { getLabel, PromptSection } from "@/lib/prompt";
 import { PromptPath } from "@/lib/prompt-search";
 import { error } from "@/lib/toast";
 import type { Editor } from "@/lib/use-prompt-editor";
-import { Plus, Trash } from "lucide-react";
-import React from "react";
+import { cn } from "@/lib/utils";
 
 import { PromptComponentPathProps } from "./component-props";
 
-function Wrapper({ id, children }: { id: string; children?: React.ReactNode }) {
-  return (
-    <div className="pl:flex pl:flex-col pl:items-start pl:justify-start pl:gap-1">
-      <p className="pl:text-xs pl:text-muted-foreground">{getLabel(id)}</p>
-      <div className="pl:flex pl:flex-row pl:flex-wrap pl:items-center pl:justify-start pl:gap-1 pl:rounded-sm pl:border pl:border-secondary/80 pl:bg-secondary/60 pl:p-2 pl:text-secondary-foreground">
-        {children}
-      </div>
-    </div>
-  );
-}
+const promptSectionStyles = cn(
+  "pl:flex pl:min-h-14 pl:flex-row pl:flex-wrap pl:items-center pl:justify-start pl:gap-1 pl:rounded-sm pl:border pl:border-secondary/80 pl:bg-secondary/60 pl:p-2 pl:text-secondary-foreground",
+);
 
 export function PromptSectionViewer({ section }: { section: PromptSection }) {
   return (
-    <Wrapper id={section.id}>
+    <div className={promptSectionStyles}>
       {section.groups.map((group) => (
         <PromptGroupViewer key={group.id} group={group} />
       ))}
-    </Wrapper>
+    </div>
   );
 }
 
@@ -43,34 +38,50 @@ export function PromptSectionEditor({
 }) {
   const path = { ...parent, sectionId: section.id };
   return (
-    <Wrapper id={section.id}>
-      {section.groups.map((group, groupIndex) => (
-        <PromptGroupEditor
-          key={group.id}
-          group={group}
-          editor={editor}
-          path={{
-            parent: path,
-            index: groupIndex,
+    <div className="pl:flex pl:flex-col pl:items-start pl:justify-start pl:gap-1">
+      <p className="pl:text-xs pl:text-muted-foreground">
+        {getLabel(section.id)}
+      </p>
+      <DraggablePromptComponent
+        slotClassName={"pl:rounded-sm"}
+        className={promptSectionStyles}
+        data={{
+          type: "prompt-section",
+          id: section.id,
+          parent: parent,
+          index: index,
+        }}
+      >
+        {section.groups.map((group, groupIndex) => (
+          <PromptGroupEditor
+            key={group.id}
+            group={group}
+            editor={editor}
+            path={{
+              parent: path,
+              index: groupIndex,
+            }}
+          />
+        ))}
+        <button
+          onClick={() => {
+            editor
+              .create(path)
+              .catch((e) => error("Failed to create group", e));
           }}
-        />
-      ))}
-      <button
-        onClick={() => {
-          editor.create(path).catch((e) => error("Failed to create group", e));
-        }}
-      >
-        <Plus className="pl:size-4" />
-      </button>
-      <button
-        onClick={() => {
-          editor
-            .delete(parent, index)
-            .catch((e) => error("Failed to delete group", e));
-        }}
-      >
-        <Trash className="pl:size-4" />
-      </button>
-    </Wrapper>
+        >
+          <Plus className="pl:size-4" />
+        </button>
+        <button
+          onClick={() => {
+            editor
+              .delete(parent, index)
+              .catch((e) => error("Failed to delete group", e));
+          }}
+        >
+          <Trash className="pl:size-4" />
+        </button>
+      </DraggablePromptComponent>
+    </div>
   );
 }

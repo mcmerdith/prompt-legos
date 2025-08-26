@@ -1,3 +1,5 @@
+import React from "react";
+
 import { DndPromptContext } from "@/components/prompt-dnd";
 import {
   SinglePromptEditor,
@@ -7,7 +9,6 @@ import type { LegoPrompt } from "@/lib/prompt";
 import { warn } from "@/lib/toast";
 import type { InitializedEditor } from "@/lib/use-prompt-editor";
 import { cn } from "@/lib/utils";
-import React from "react";
 
 function Wrapper({
   className,

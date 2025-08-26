@@ -1,12 +1,13 @@
-import { error } from "@/lib/toast";
-import { useEditorContext } from "@/lib/use-editor-context";
 import {
-  type KeyboardEvent,
   useCallback,
   useEffect,
   useRef,
   useState,
+  type KeyboardEvent,
 } from "react";
+
+import { error } from "@/lib/toast";
+import { useEditorContext } from "@/lib/use-editor-context";
 
 import { PromptGroup } from "./prompt";
 import { SectionPath } from "./prompt-search";

@@ -1,10 +1,11 @@
+import { InputSpec } from "@comfyorg/comfyui-frontend-types";
+import React from "react";
+import { z } from "zod/v4";
+
 import { LegoPrompt } from "@/lib/prompt";
 import { usePromptStore } from "@/stores/prompt-store";
 import { addReactWidget } from "@/utils/react-wrapper";
 import { app } from "@/utils/shims";
-import { InputSpec } from "@comfyorg/comfyui-frontend-types";
-import React from "react";
-import { z } from "zod/v4";
 
 // Lazy load the App component for better performance
 const PromptWidget = React.lazy(() => import("./prompt-widget"));

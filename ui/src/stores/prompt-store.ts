@@ -1,11 +1,12 @@
-import { createSinglePrompt, LegoPrompt } from "@/lib/prompt";
-import { error, fatal, warn } from "@/lib/toast";
-import type { NodeId } from "@/utils/shims";
 import { WritableDraft } from "immer";
 import z from "zod/v4";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
+
+import { createSinglePrompt, LegoPrompt } from "@/lib/prompt";
+import { error, fatal, warn } from "@/lib/toast";
+import type { NodeId } from "@/utils/shims";
 
 const NodeId = z.union([z.string(), z.number()]);
 

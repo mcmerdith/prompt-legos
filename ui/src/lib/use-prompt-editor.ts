@@ -1,3 +1,6 @@
+import type { LGraphNode } from "@comfyorg/comfyui-frontend-types";
+import { WritableDraft } from "immer";
+
 import {
   LegoPrompt,
   newPromptGroup,
@@ -6,19 +9,17 @@ import {
 } from "@/lib/prompt";
 import {
   ComponentChildFromPath,
-  type ComponentParentPath,
-  type ComponentPath,
   deepSearch,
   deepSearchPair,
   GroupPath,
   isPromptPath,
   isSectionPath,
+  type ComponentParentPath,
+  type ComponentPath,
 } from "@/lib/prompt-search";
 import { getPromptNode, insertItem, moveItem } from "@/lib/utils";
 import { usePromptStore } from "@/stores/prompt-store";
 import type { NodeId } from "@/utils/shims";
-import type { LGraphNode } from "@comfyorg/comfyui-frontend-types";
-import { WritableDraft } from "immer";
 
 import { fatal } from "./toast";
 

@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import type {
   BottomPanelExtension,
   DOMWidget,
@@ -7,6 +6,8 @@ import type {
 } from "@comfyorg/comfyui-frontend-types";
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
+
+import { cn } from "@/lib/utils";
 
 function createReactApp<T extends React.ReactElement>(
   id: string,

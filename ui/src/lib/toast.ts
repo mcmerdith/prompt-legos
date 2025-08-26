@@ -1,5 +1,6 @@
-import { app } from "@/utils/shims";
 import { ToastMessageOptions } from "@comfyorg/comfyui-frontend-types";
+
+import { app } from "@/utils/shims";
 
 type PLToastOptions = Omit<
   ToastMessageOptions,
