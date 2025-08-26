@@ -1,5 +1,5 @@
-import { LegoPrompt } from "@/lib/prompt";
-import { fatal, warn } from "@/lib/toast";
+import { createSinglePrompt, LegoPrompt } from "@/lib/prompt";
+import { error, fatal, warn } from "@/lib/toast";
 import type { NodeId } from "@/utils/shims";
 import { WritableDraft } from "immer";
 import z from "zod/v4";
@@ -11,13 +11,15 @@ const NodeId = z.union([z.string(), z.number()]);
 
 const PromptStoreData = z.object({
   activeNode: NodeId.optional(),
-  values: z.record(NodeId, LegoPrompt),
+  inputSpec: z.record(NodeId, z.string().array().or(z.undefined())),
+  values: z.record(NodeId, LegoPrompt.or(z.undefined())),
 });
 type PromptStoreData = z.infer<typeof PromptStoreData>;
 
 interface PromptStoreActions {
   setActiveEditor(nodeId: NodeId | undefined): void;
-  create(nodeId: NodeId, value: LegoPrompt): LegoPrompt;
+  create(nodeId: NodeId, promptIds: string[], force?: boolean): void;
+  recreate(nodeId: NodeId): void;
   delete(nodeId: NodeId): void;
   update(
     nodeId: NodeId,
@@ -30,24 +32,70 @@ type PromptStoreState = PromptStoreData & PromptStoreActions;
 export const usePromptStore = create<PromptStoreState>()(
   devtools(
     persist(
-      immer((set) => ({
+      immer((set, get) => ({
         activeNode: undefined,
-        setActiveEditor: (nodeId) => set(() => ({ activeNode: nodeId })),
-
+        inputSpec: {},
         values: {},
-        create(nodeId, value) {
+        setActiveEditor: (nodeId) => set(() => ({ activeNode: nodeId })),
+        create(nodeId, promptIds, force) {
           set((state) => {
-            state.values[nodeId] = value;
+            const oldIds = new Set(state.inputSpec[nodeId]);
+            const newIds = new Set(promptIds);
+            if (oldIds.size > -1) {
+              const difference = newIds.symmetricDifference(oldIds);
+
+              if (difference.size > 0) {
+                warn(
+                  "Prompt node mismatch!",
+                  `Node ${nodeId} expected [${[...oldIds]}], but we have [${[...newIds]}]. You should recreate the node`,
+                );
+              }
+            }
+
+            const newIdArr = [...newIds];
+            state.inputSpec[nodeId] = newIdArr;
+
+            if (force) {
+              // overwrite everything
+              state.values[nodeId] = {
+                prompts: newIdArr.map((segment) => createSinglePrompt(segment)),
+              };
+            } else {
+              // try to reuse old segments
+              state.values[nodeId] = {
+                prompts: newIdArr.map(
+                  (newId) =>
+                    state.values[nodeId]?.prompts.find((p) => p.id === newId) ??
+                    createSinglePrompt(newId),
+                ),
+              };
+            }
           });
-          return value;
+        },
+        recreate(nodeId) {
+          const store = get();
+          const spec = store.inputSpec[nodeId];
+          if (!spec)
+            fatal(
+              "Failed to recreate prompt store!",
+              `Node ${nodeId} has no saved input spec. Try reloading or recreating the node`,
+            );
+          store.delete(nodeId);
+          store.create(nodeId, spec);
         },
         delete: (nodeId) =>
           set((state) => {
+            if (state.activeNode === nodeId) state.activeNode = undefined;
             delete state.values[nodeId];
           }),
         update: (nodeId, update) =>
-          set((state) => {
-            update(state.values[nodeId]);
+          set((current) => {
+            const value = current.values[nodeId];
+            if (!value) {
+              error("Failed to update prompt", "Not initialized");
+              return;
+            }
+            update(value);
           }),
       })),
       {

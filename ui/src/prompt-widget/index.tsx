@@ -1,4 +1,4 @@
-import { createSinglePrompt, LegoPrompt } from "@/lib/prompt";
+import { LegoPrompt } from "@/lib/prompt";
 import { usePromptStore } from "@/stores/prompt-store";
 import { addReactWidget } from "@/utils/react-wrapper";
 import { app } from "@/utils/shims";
@@ -31,7 +31,7 @@ export function registerPromptWidget() {
         originalOnNodeRemoved?.apply(app.graph, [node]);
         if (node.comfyClass === "PromptLegosPrompt") {
           console.debug("Removing prompt editor for node", node.id);
-          setTimeout(() => usePromptStore.getState().delete(node.id), 1000);
+          usePromptStore.getState().delete(node.id);
         }
       };
     },
@@ -41,16 +41,10 @@ export function registerPromptWidget() {
         LEGO_PROMPT: (node, inputName, inputSpec: InputSpec) => {
           const [_, { segments }] = LEGO_PROMPT_INPUT_SPEC.parse(inputSpec);
 
-          const state = usePromptStore.getState();
-
           const originalOnAdded = node.onAdded;
           node.onAdded = function (graph) {
             originalOnAdded?.apply(node, [graph]);
-            console.debug(node.id, "onAdded", state.values);
-            if (!state.values[node.id])
-              state.create(node.id, {
-                prompts: segments.map((segment) => createSinglePrompt(segment)),
-              });
+            usePromptStore.getState().create(node.id, segments);
           };
 
           const widget = addReactWidget(
@@ -59,7 +53,9 @@ export function registerPromptWidget() {
             <PromptWidget node={node} />,
             {
               getValue(): LegoPrompt {
-                return state.values[node.id] ?? { prompts: {} };
+                return (
+                  usePromptStore.getState().values[node.id] ?? { prompts: [] }
+                );
               },
               setValue(_value: LegoPrompt) {
                 // todo

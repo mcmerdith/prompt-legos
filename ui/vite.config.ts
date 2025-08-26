@@ -1,11 +1,11 @@
-import tailwindcss from "@tailwindcss/vite"
-import react from "@vitejs/plugin-react"
-import path from "path"
-import { visualizer } from "rollup-plugin-visualizer"
-import { defineConfig } from "vite"
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+import { visualizer } from "rollup-plugin-visualizer";
+import { defineConfig } from "vite";
 
 interface RewriteComfyImportsOptions {
-  isDev: boolean
+  isDev: boolean;
 }
 
 // Plugin to correctly handle the ComfyUI scripts in development mode
@@ -14,24 +14,24 @@ const rewriteComfyImports = ({ isDev }: RewriteComfyImportsOptions) => {
     name: "rewrite-comfy-imports",
     resolveId(source: string) {
       if (!isDev) {
-        return
+        return;
       }
       if (source === "/scripts/app.js") {
-        return "http://127.0.0.1:8188/scripts/app.js"
+        return "http://127.0.0.1:8188/scripts/app.js";
       }
       if (source === "/scripts/api.js") {
-        return "http://127.0.0.1:8188/scripts/api.js"
+        return "http://127.0.0.1:8188/scripts/api.js";
       }
-      return null
-    }
-  }
-}
+      return null;
+    },
+  };
+};
 
 function chunk(id: string, modules: string[]) {
   for (const module of modules) {
-    if (id.includes(`/${module}`)) return true
+    if (id.includes(`/${module}`)) return true;
   }
-  return false
+  return false;
 }
 
 export default defineConfig(({ mode }) => ({
@@ -39,30 +39,24 @@ export default defineConfig(({ mode }) => ({
     react(),
     tailwindcss(),
     rewriteComfyImports({ isDev: mode === "development" }),
-    visualizer()
+    visualizer(),
   ],
 
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "src")
-    }
+      "@": path.resolve(__dirname, "src"),
+    },
   },
 
   build: {
-    watch: {
-      include: ["src/**"],
-      exclude: ["node_modules/**", "dist/**", ".git/**", ".idea/**"],
-      chokidar: {
-        atomic: true
-      }
-    },
-    // sourcemap: true,
+    minify: mode === "development" ? false : undefined,
+    sourcemap: mode === "development",
     emptyOutDir: true,
     rollupOptions: {
       // Don't bundle ComfyUI scripts - they will be loaded from the ComfyUI server
       external: ["/scripts/app.js", "/scripts/api.js"],
       input: {
-        main: path.resolve(__dirname, "src/main.ts")
+        main: path.resolve(__dirname, "src/main.ts"),
       },
       output: {
         // Output to the dist/example_ext directory
@@ -72,12 +66,12 @@ export default defineConfig(({ mode }) => ({
         assetFileNames: "prompt-legos/[name][extname]",
         // Split React into a separate vendor chunk for better caching
         manualChunks(id: string) {
-          if (chunk(id, ["@dnd-kit"])) return "dnd-kit"
-          if (chunk(id, ["zod"])) return "zod"
-          if (id.includes("node_modules")) return "vendor"
-          return null
-        }
-      }
-    }
-  }
-}))
+          if (chunk(id, ["@dnd-kit"])) return "dnd-kit";
+          if (chunk(id, ["zod"])) return "zod";
+          if (id.includes("node_modules")) return "vendor";
+          return null;
+        },
+      },
+    },
+  },
+}));

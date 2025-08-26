@@ -148,6 +148,8 @@ function PromptComponentPreview({ element }: { element: Draggable }) {
   const { type, id, parent } = DragDropData.parse(element.data);
   const lp = values[activeNode];
 
+  if (!lp) return null;
+
   if (type === "prompt-section") {
     const section = deepSearch(lp, {
       ...parent,

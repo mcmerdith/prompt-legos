@@ -70,7 +70,8 @@ export function usePromptEditor(nodeId: NodeId): Editor | InitializedEditor {
 
   return {
     editorName: node.title,
-    node,
+    node: node,
+    value: store,
     create(parentPath, index, id) {
       /**
        * This method is responsible for the hell of creating new components
@@ -228,6 +229,5 @@ export function usePromptEditor(nodeId: NodeId): Editor | InitializedEditor {
     rawUpdate(update) {
       updateValue(node.id, update);
     },
-    value: store,
   };
 }

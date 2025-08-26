@@ -39,7 +39,7 @@ export function PromptItemEditor({
   editor: Editor;
   path: PromptComponentPathProps<GroupPath>;
 }) {
-  const { keydownHandler, inputsRef, autofocusInputId } =
+  const { keydownHandler, valueInputsRef, weightInputsRef, autofocusInputId } =
     useUnifiedInputContext();
   const path = {
     ...parent,
@@ -58,7 +58,7 @@ export function PromptItemEditor({
     >
       <input
         autoFocus={autofocusInputId === item.id}
-        className="pl:field-sizing-content pl:selection:bg-background pl:selection:text-foreground"
+        className="pl:field-sizing-content pl:selection:bg-background pl:selection:text-foreground pl:outline-offset-2 pl:px-0.5"
         value={item.value}
         placeholder={"new value"}
         onKeyDown={(event) => keydownHandler(event, index)}
@@ -69,7 +69,7 @@ export function PromptItemEditor({
         }}
         key={item.id}
         ref={(el) => {
-          inputsRef[item.id] = el;
+          valueInputsRef[item.id] = el;
         }}
       />
       <VerticalSeparator
@@ -77,14 +77,19 @@ export function PromptItemEditor({
       />
       <input
         className={
-          "pl:field-sizing-content pl:text-2xs pl:selection:bg-background pl:selection:text-foreground"
+          "pl:field-sizing-content pl:text-2xs pl:selection:bg-background pl:selection:text-foreground pl:slick-number-input pl:outline-offset-2 pl:px-0.5"
         }
         type={"number"}
         value={item.weight}
+        onKeyDown={(event) => keydownHandler(event, index, true)}
         onChange={(event) => {
           editor.rawUpdate((p) => {
             deepSearch(p, path)!.weight = parseFloat(event.target.value);
           });
+        }}
+        onFocus={(event) => event.currentTarget.select()}
+        ref={(el) => {
+          weightInputsRef[item.id] = el;
         }}
       />
     </DraggablePromptComponent>

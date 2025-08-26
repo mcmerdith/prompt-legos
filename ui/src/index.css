@@ -14,6 +14,13 @@
     --text-3xs--line-height: calc(1 / 0.5);
 }
 
+@utility slick-number-input {
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+        @apply pl:appearance-none pl:m-0;
+    }
+}
+
 /* Scope tailwind preflight to only affect PL */
 .prompt-legos-react-app {
     /*noinspection CssInvalidImport*/
