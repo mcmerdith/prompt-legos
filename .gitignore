@@ -32,19 +32,8 @@ Temporary Items
 
 # Distribution / packaging
 .Python
-env/
-venv/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
+.venv
+dist
 *.egg-info/
 .installed.cfg
 *.egg
@@ -100,6 +89,7 @@ cookiecutter-pypackage-env/
 *.code-workspace
 
 # Frontend extension
+stats.html
 node_modules/
 .env
 .env.local
