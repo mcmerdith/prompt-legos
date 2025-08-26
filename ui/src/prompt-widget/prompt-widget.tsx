@@ -1,13 +1,13 @@
-import { LegoPromptViewer } from "@/components/prompt-editor"
-import { isInitializedEditor, usePromptEditor } from "@/lib/use-prompt-editor"
-import { usePromptStore } from "@/stores/prompt-store"
-import { app } from "@/utils/shims"
-import type { LGraphNode } from "@comfyorg/comfyui-frontend-types"
+import { LegoPromptViewer } from "@/components/prompt-editor";
+import { isInitializedEditor, usePromptEditor } from "@/lib/use-prompt-editor";
+import { usePromptStore } from "@/stores/prompt-store";
+import { app } from "@/utils/shims";
+import type { LGraphNode } from "@comfyorg/comfyui-frontend-types";
 
 export default function PromptWidget({ node }: { node: LGraphNode }) {
-  const editor = usePromptEditor(node.id)
+  const editor = usePromptEditor(node.id);
 
-  if (!isInitializedEditor(editor)) return <div>Not initialized</div>
+  if (!isInitializedEditor(editor)) return <div>Not initialized</div>;
 
   return (
     <div className="pl:flex pl:h-full pl:flex-col">
@@ -19,15 +19,15 @@ export default function PromptWidget({ node }: { node: LGraphNode }) {
           className="pl:w-full pl:rounded-sm pl:border-secondary/80 pl:bg-secondary/60 pl:p-1"
           onClick={() => {
             app.extensionManager.command.execute(
-              "PromptLegos.PromptCreator.Open"
-            )
+              "PromptLegos.PromptCreator.Open",
+            );
 
-            usePromptStore.setState({ activeNode: node.id })
+            usePromptStore.setState({ activeNode: node.id });
           }}
         >
           Open prompt creator
         </button>
       </footer>
     </div>
-  )
+  );
 }

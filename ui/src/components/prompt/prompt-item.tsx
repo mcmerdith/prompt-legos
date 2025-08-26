@@ -1,13 +1,14 @@
-import { DraggablePromptComponent } from "@/components/prompt-dnd"
-import { VerticalSeparator } from "@/components/separator"
-import { PromptItem } from "@/lib/prompt"
-import { deepSearch, GroupPath } from "@/lib/prompt-search"
-import { useUnifiedInputContext } from "@/lib/use-editor-context"
-import type { Editor } from "@/lib/use-prompt-editor"
-import { PromptComponentPathProps } from "./component-props"
+import { DraggablePromptComponent } from "@/components/prompt-dnd";
+import { VerticalSeparator } from "@/components/separator";
+import { PromptItem } from "@/lib/prompt";
+import { deepSearch, GroupPath } from "@/lib/prompt-search";
+import { useUnifiedInputContext } from "@/lib/use-editor-context";
+import type { Editor } from "@/lib/use-prompt-editor";
+
+import { PromptComponentPathProps } from "./component-props";
 
 const promptItemStyles =
-  "pl:flex pl:flex-row pl:gap-1 pl:rounded-md pl:border pl:border-primary/80 pl:bg-primary/60 pl:px-1 pl:text-xs"
+  "pl:flex pl:flex-row pl:gap-1 pl:rounded-md pl:border pl:border-primary/80 pl:bg-primary/60 pl:px-1 pl:text-xs";
 
 export function PromptItemViewer({ item }: { item: PromptItem }) {
   return (
@@ -26,24 +27,24 @@ export function PromptItemViewer({ item }: { item: PromptItem }) {
         {item.weight}
       </p>
     </div>
-  )
+  );
 }
 
 export function PromptItemEditor({
   item,
   editor,
-  path: { parent, index }
+  path: { parent, index },
 }: {
-  item: PromptItem
-  editor: Editor
-  path: PromptComponentPathProps<GroupPath>
+  item: PromptItem;
+  editor: Editor;
+  path: PromptComponentPathProps<GroupPath>;
 }) {
   const { keydownHandler, inputsRef, autofocusInputId } =
-    useUnifiedInputContext()
+    useUnifiedInputContext();
   const path = {
     ...parent,
-    itemId: item.id
-  }
+    itemId: item.id,
+  };
   return (
     <DraggablePromptComponent
       slotClassName={"pl:rounded-md"}
@@ -52,7 +53,7 @@ export function PromptItemEditor({
         type: "prompt-item",
         id: item.id,
         parent: parent,
-        index: index
+        index: index,
       }}
     >
       <input
@@ -63,12 +64,12 @@ export function PromptItemEditor({
         onKeyDown={(event) => keydownHandler(event, index)}
         onChange={(event) => {
           editor.rawUpdate((p) => {
-            deepSearch(p, path)!.value = event.target.value
-          })
+            deepSearch(p, path)!.value = event.target.value;
+          });
         }}
         key={item.id}
         ref={(el) => {
-          inputsRef[item.id] = el
+          inputsRef[item.id] = el;
         }}
       />
       <VerticalSeparator
@@ -82,10 +83,10 @@ export function PromptItemEditor({
         value={item.weight}
         onChange={(event) => {
           editor.rawUpdate((p) => {
-            deepSearch(p, path)!.weight = parseFloat(event.target.value)
-          })
+            deepSearch(p, path)!.weight = parseFloat(event.target.value);
+          });
         }}
       />
     </DraggablePromptComponent>
-  )
+  );
 }

@@ -1,39 +1,39 @@
-import { DndPromptContext } from "@/components/prompt-dnd"
+import { DndPromptContext } from "@/components/prompt-dnd";
 import {
   SinglePromptEditor,
-  SinglePromptViewer
-} from "@/components/prompt/single-prompt"
-import type { LegoPrompt } from "@/lib/prompt"
-import { warn } from "@/lib/toast"
-import type { InitializedEditor } from "@/lib/use-prompt-editor"
-import { cn } from "@/lib/utils"
-import React from "react"
+  SinglePromptViewer,
+} from "@/components/prompt/single-prompt";
+import type { LegoPrompt } from "@/lib/prompt";
+import { warn } from "@/lib/toast";
+import type { InitializedEditor } from "@/lib/use-prompt-editor";
+import { cn } from "@/lib/utils";
+import React from "react";
 
 function Wrapper({
   className,
-  children
+  children,
 }: {
-  className?: string
-  children?: React.ReactNode
+  className?: string;
+  children?: React.ReactNode;
 }) {
   return (
     <div
       className={cn(
         "pl:flex pl:w-full pl:flex-col pl:items-stretch pl:justify-start pl:gap-4",
-        className
+        className,
       )}
     >
       {children}
     </div>
-  )
+  );
 }
 
 export function LegoPromptViewer({
   prompt,
-  className
+  className,
 }: {
-  prompt: LegoPrompt
-  className?: string
+  prompt: LegoPrompt;
+  className?: string;
 }) {
   return (
     <Wrapper className={className}>
@@ -41,15 +41,15 @@ export function LegoPromptViewer({
         <SinglePromptViewer singlePrompt={prompt} key={prompt.id} />
       ))}
     </Wrapper>
-  )
+  );
 }
 
 export default function LegoPromptEditor({
   editor,
-  className
+  className,
 }: {
-  editor: InitializedEditor
-  className?: string
+  editor: InitializedEditor;
+  className?: string;
 }) {
   return (
     <DndPromptContext editor={editor}>
@@ -57,15 +57,15 @@ export default function LegoPromptEditor({
         <button
           onClick={() => {
             editor.rawUpdate((state) => {
-              state.prompts = []
-            })
+              state.prompts = [];
+            });
             try {
-              void editor.node.recreate?.()
+              void editor.node.recreate?.();
             } catch (e) {
               warn(
                 "Your ComfyUI version doesn't support automatic recreation!",
-                "Use 'Fix node (recreate)'"
-              )
+                "Use 'Fix node (recreate)'",
+              );
             }
           }}
         >
@@ -80,7 +80,7 @@ export default function LegoPromptEditor({
         ))}
       </Wrapper>
     </DndPromptContext>
-  )
+  );
 }
 
 // editor.value?.prompts.map((prompt) => (

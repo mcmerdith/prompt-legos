@@ -1,11 +1,12 @@
 import {
   PromptSectionEditor,
-  PromptSectionViewer
-} from "@/components/prompt/prompt-section"
-import { getLabel, SinglePrompt } from "@/lib/prompt"
-import type { Editor } from "@/lib/use-prompt-editor"
-import { Plus } from "lucide-react"
-import React from "react"
+  PromptSectionViewer,
+} from "@/components/prompt/prompt-section";
+import { getLabel, SinglePrompt } from "@/lib/prompt";
+import { error } from "@/lib/toast";
+import type { Editor } from "@/lib/use-prompt-editor";
+import { Plus } from "lucide-react";
+import React from "react";
 
 function Wrapper({ id, children }: { id: string; children?: React.ReactNode }) {
   return (
@@ -15,13 +16,13 @@ function Wrapper({ id, children }: { id: string; children?: React.ReactNode }) {
         {children}
       </div>
     </div>
-  )
+  );
 }
 
 export function SinglePromptViewer({
-  singlePrompt
+  singlePrompt,
 }: {
-  singlePrompt: SinglePrompt
+  singlePrompt: SinglePrompt;
 }) {
   return (
     <Wrapper id={singlePrompt.id}>
@@ -29,17 +30,17 @@ export function SinglePromptViewer({
         <PromptSectionViewer key={section.id} section={section} />
       ))}
     </Wrapper>
-  )
+  );
 }
 
 export function SinglePromptEditor({
   singlePrompt,
-  editor
+  editor,
 }: {
-  singlePrompt: SinglePrompt
-  editor: Editor
+  singlePrompt: SinglePrompt;
+  editor: Editor;
 }) {
-  const path = { promptId: singlePrompt.id }
+  const path = { promptId: singlePrompt.id };
   return (
     <Wrapper id={singlePrompt.id}>
       {singlePrompt.sections.map((section, sectionIndex) => (
@@ -49,14 +50,16 @@ export function SinglePromptEditor({
           editor={editor}
           path={{
             parent: path,
-            index: sectionIndex
+            index: sectionIndex,
           }}
         />
       ))}
       <button
         onClick={() => {
-          const name = prompt("New section name")
-          editor.create(path, undefined, name?.replace(/\s/g, "-"))
+          const name = prompt("New section name");
+          editor
+            .create(path, undefined, name?.replace(/\s/g, "-"))
+            .catch((e) => error("Failed to create section", e));
         }}
         className="pl:flex pl:flex-row pl:items-center pl:justify-start pl:gap-1"
       >
@@ -64,5 +67,5 @@ export function SinglePromptEditor({
         <span className="pl:text-sm">Add Section</span>
       </button>
     </Wrapper>
-  )
+  );
 }

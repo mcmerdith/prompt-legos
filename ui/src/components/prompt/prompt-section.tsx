@@ -1,10 +1,15 @@
-import { PromptGroupEditor, PromptGroupViewer } from "@/components/prompt/prompt-group"
-import { getLabel, PromptSection } from "@/lib/prompt"
-import { PromptPath } from "@/lib/prompt-search"
-import type { Editor } from "@/lib/use-prompt-editor"
-import { Plus, Trash } from "lucide-react"
-import React from "react"
-import { PromptComponentPathProps } from "./component-props"
+import {
+  PromptGroupEditor,
+  PromptGroupViewer,
+} from "@/components/prompt/prompt-group";
+import { getLabel, PromptSection } from "@/lib/prompt";
+import { PromptPath } from "@/lib/prompt-search";
+import { error } from "@/lib/toast";
+import type { Editor } from "@/lib/use-prompt-editor";
+import { Plus, Trash } from "lucide-react";
+import React from "react";
+
+import { PromptComponentPathProps } from "./component-props";
 
 function Wrapper({ id, children }: { id: string; children?: React.ReactNode }) {
   return (
@@ -14,7 +19,7 @@ function Wrapper({ id, children }: { id: string; children?: React.ReactNode }) {
         {children}
       </div>
     </div>
-  )
+  );
 }
 
 export function PromptSectionViewer({ section }: { section: PromptSection }) {
@@ -24,19 +29,19 @@ export function PromptSectionViewer({ section }: { section: PromptSection }) {
         <PromptGroupViewer key={group.id} group={group} />
       ))}
     </Wrapper>
-  )
+  );
 }
 
 export function PromptSectionEditor({
   section,
   editor,
-  path: { parent, index }
+  path: { parent, index },
 }: {
-  section: PromptSection
-  editor: Editor
-  path: PromptComponentPathProps<PromptPath>
+  section: PromptSection;
+  editor: Editor;
+  path: PromptComponentPathProps<PromptPath>;
 }) {
-  const path = { ...parent, sectionId: section.id }
+  const path = { ...parent, sectionId: section.id };
   return (
     <Wrapper id={section.id}>
       {section.groups.map((group, groupIndex) => (
@@ -46,24 +51,26 @@ export function PromptSectionEditor({
           editor={editor}
           path={{
             parent: path,
-            index: groupIndex
+            index: groupIndex,
           }}
         />
       ))}
       <button
         onClick={() => {
-          editor.create(path)
+          editor.create(path).catch((e) => error("Failed to create group", e));
         }}
       >
         <Plus className="pl:size-4" />
       </button>
       <button
         onClick={() => {
-          editor.delete(parent, index)
+          editor
+            .delete(parent, index)
+            .catch((e) => error("Failed to delete group", e));
         }}
       >
         <Trash className="pl:size-4" />
       </button>
     </Wrapper>
-  )
+  );
 }

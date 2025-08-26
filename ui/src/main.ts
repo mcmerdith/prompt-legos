@@ -1,14 +1,16 @@
-import { registerPromptCreator } from "./prompt-creator"
-import { registerPromptWidget } from "./prompt-widget"
-import { registerSidebar } from "./sidebar-tab"
-import "./utils/i18n"
-import { app } from "./utils/shims"
+import { registerPromptCreator } from "./prompt-creator";
+import { registerPromptWidget } from "./prompt-widget";
+import { registerSidebar } from "./sidebar-tab";
 
-void import("./index.css")
+import "./utils/i18n";
 
-registerSidebar()
-registerPromptWidget()
-registerPromptCreator()
+import { app } from "./utils/shims";
+
+void import("./index.css");
+
+registerSidebar();
+registerPromptWidget();
+registerPromptCreator();
 
 try {
   // Register extension with about page badges
@@ -20,8 +22,8 @@ try {
       {
         label: "GitHub",
         url: "https://github.com/mcmerdith/prompt_legos",
-        icon: "pi pi-github"
-      }
+        icon: "pi pi-github",
+      },
     ],
 
     // Associate keybindings with the commands
@@ -29,14 +31,14 @@ try {
       {
         combo: {
           key: "p",
-          ctrl: true
+          ctrl: true,
         },
-        commandId: "Workspace.ToggleBottomPanelTab.prompt-legos-prompt-creator"
-      }
-    ]
-  })
+        commandId: "Workspace.ToggleBottomPanelTab.prompt-legos-prompt-creator",
+      },
+    ],
+  });
 
   // Initialize the extension once everything is ready
 } catch (error) {
-  console.error("Failed to initialize Prompt Legos:", error)
+  console.error("Failed to initialize Prompt Legos:", error);
 }

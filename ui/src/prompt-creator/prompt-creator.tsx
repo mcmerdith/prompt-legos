@@ -1,20 +1,20 @@
-import LegoPromptEditor from "@/components/prompt-editor"
-import { EditorContextProvider } from "@/lib/use-editor-context"
-import { isInitializedEditor, usePromptEditor } from "@/lib/use-prompt-editor"
-import { cn } from "@/lib/utils"
-import { usePromptStore } from "@/stores/prompt-store"
+import LegoPromptEditor from "@/components/prompt-editor";
+import { EditorContextProvider } from "@/lib/use-editor-context";
+import { isInitializedEditor, usePromptEditor } from "@/lib/use-prompt-editor";
+import { cn } from "@/lib/utils";
+import { usePromptStore } from "@/stores/prompt-store";
 
 // Create a React component for the tab content
 export default function PromptCreator({
-  layout = "col"
+  layout = "col",
 }: {
-  layout?: "col" | "row"
+  layout?: "col" | "row";
 }) {
-  const activeNode = usePromptStore((state) => state.activeNode)
-  const editor = usePromptEditor(activeNode ?? "undefined")
+  const activeNode = usePromptStore((state) => state.activeNode);
+  const editor = usePromptEditor(activeNode ?? "undefined");
 
   if (!isInitializedEditor(editor)) {
-    return <div>No active editor</div>
+    return <div>No active editor</div>;
   }
 
   return (
@@ -27,7 +27,7 @@ export default function PromptCreator({
           "pl:flex pl:w-full pl:gap-4",
           layout == "row"
             ? "pl:flex-row pl:items-start pl:justify-around"
-            : "pl:flex-col pl:items-stretch pl:justify-start"
+            : "pl:flex-col pl:items-stretch pl:justify-start",
         )}
       >
         <EditorContextProvider value={editor}>
@@ -35,5 +35,5 @@ export default function PromptCreator({
         </EditorContextProvider>
       </div>
     </div>
-  )
+  );
 }

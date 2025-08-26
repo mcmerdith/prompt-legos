@@ -1,10 +1,10 @@
-import { createReactBottomPanelTab } from "@/utils/react-wrapper"
-import { app } from "@/utils/shims"
-import React from "react"
+import { createReactBottomPanelTab } from "@/utils/react-wrapper";
+import { app } from "@/utils/shims";
+import React from "react";
 
-const PromptCreator = React.lazy(() => import("./prompt-creator"))
+const PromptCreator = React.lazy(() => import("./prompt-creator"));
 
-const ElementId = "prompt-legos-prompt-creator" as const
+const ElementId = "prompt-legos-prompt-creator" as const;
 
 export function registerPromptCreator() {
   app.registerExtension({
@@ -15,26 +15,26 @@ export function registerPromptCreator() {
       createReactBottomPanelTab(
         "Prompt Creator",
         ElementId,
-        <PromptCreator layout="row" />
-      )
+        <PromptCreator layout="row" />,
+      ),
     ],
 
     commands: [
       {
         id: "PromptLegos.PromptCreator.Open",
         function() {
-          const open = document.getElementById(ElementId) !== null
+          const open = document.getElementById(ElementId) !== null;
 
           if (open) {
             // Don't reopen the tab
-            return
+            return;
           }
 
           app.extensionManager.command.execute(
-            `Workspace.ToggleBottomPanelTab.${ElementId}`
-          )
-        }
-      }
-    ]
-  })
+            `Workspace.ToggleBottomPanelTab.${ElementId}`,
+          );
+        },
+      },
+    ],
+  });
 }

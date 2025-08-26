@@ -1,49 +1,49 @@
-import { PromptGroupViewer } from "@/components/prompt/prompt-group"
-import { PromptItemViewer } from "@/components/prompt/prompt-item"
-import { PromptSectionViewer } from "@/components/prompt/prompt-section"
+import { PromptGroupViewer } from "@/components/prompt/prompt-group";
+import { PromptItemViewer } from "@/components/prompt/prompt-item";
+import { PromptSectionViewer } from "@/components/prompt/prompt-section";
 import {
   deepSearch,
   GroupPath,
   PromptPath,
-  SectionPath
-} from "@/lib/prompt-search"
-import { error } from "@/lib/toast"
-import { InitializedEditor } from "@/lib/use-prompt-editor"
-import { cn } from "@/lib/utils"
-import { usePromptStore } from "@/stores/prompt-store"
-import { Draggable } from "@dnd-kit/dom"
+  SectionPath,
+} from "@/lib/prompt-search";
+import { error } from "@/lib/toast";
+import { InitializedEditor } from "@/lib/use-prompt-editor";
+import { cn } from "@/lib/utils";
+import { usePromptStore } from "@/stores/prompt-store";
+import { Draggable } from "@dnd-kit/dom";
 import {
   DragDropProvider,
   DragOverlay,
   KeyboardSensor,
   PointerSensor,
   useDraggable,
-  useDroppable
-} from "@dnd-kit/react"
-import React, { ComponentPropsWithoutRef } from "react"
-import z from "zod/v4"
+  useDroppable,
+} from "@dnd-kit/react";
+import React, { ComponentPropsWithoutRef } from "react";
+import z from "zod/v4";
 
 const DragDropData = z.union([
   z.object({
     type: z.literal("prompt-section"),
     id: z.string(),
     parent: PromptPath,
-    index: z.number()
+    index: z.number(),
   }),
   z.object({
     type: z.literal("prompt-group"),
     id: z.string(),
     parent: SectionPath,
-    index: z.number()
+    index: z.number(),
   }),
   z.object({
     type: z.literal("prompt-item"),
     id: z.string(),
     parent: GroupPath,
-    index: z.number()
-  })
-])
-type DragDropData = z.infer<typeof DragDropData>
+    index: z.number(),
+  }),
+]);
+type DragDropData = z.infer<typeof DragDropData>;
 
 export function DraggablePromptComponent({
   data,
@@ -51,14 +51,14 @@ export function DraggablePromptComponent({
   className,
   ...props
 }: {
-  slotClassName?: string
-  data: DragDropData
+  slotClassName?: string;
+  data: DragDropData;
 } & ComponentPropsWithoutRef<"div">) {
   const { ref, isDragging } = useDraggable({
     id: data.id,
     type: data.type,
-    data: data
-  })
+    data: data,
+  });
 
   return (
     <DroppablePromptSlot className={slotClassName} data={data}>
@@ -68,7 +68,7 @@ export function DraggablePromptComponent({
         {...props}
       />
     </DroppablePromptSlot>
-  )
+  );
 }
 
 export function DroppablePromptSlot({
@@ -76,14 +76,14 @@ export function DroppablePromptSlot({
   className,
   ...props
 }: {
-  data: DragDropData
+  data: DragDropData;
 } & ComponentPropsWithoutRef<"div">) {
   const { ref, isDropTarget } = useDroppable({
     id: data.id,
     type: `${data.type}-slot`,
     accept: data.type,
-    data: data
-  })
+    data: data,
+  });
 
   return (
     <div
@@ -91,19 +91,19 @@ export function DroppablePromptSlot({
       className={cn(
         "pl:border-2 pl:border-dashed",
         !isDropTarget ? "pl:border-transparent" : undefined, // todo fix this by making the elements fixed size
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
 export function DndPromptContext({
   editor,
-  children
+  children,
 }: {
-  editor: InitializedEditor
-  children?: React.ReactNode
+  editor: InitializedEditor;
+  children?: React.ReactNode;
 }) {
   // const editor = useEditorContext()
   return (
@@ -111,25 +111,25 @@ export function DndPromptContext({
       sensors={[PointerSensor, KeyboardSensor]}
       // collisionDetection={closestCorners}
       onDragEnd={({ operation, canceled }) => {
-        if (canceled) return
-        const { source, target } = operation
-        if (source === null || target === null) return
-        const sourceData = DragDropData.parse(source.data)
-        const targetData = DragDropData.parse(target.data)
+        if (canceled) return;
+        const { source, target } = operation;
+        if (source === null || target === null) return;
+        const sourceData = DragDropData.parse(source.data);
+        const targetData = DragDropData.parse(target.data);
 
-        if (!editor.value) return
+        if (!editor.value) return;
         if (sourceData.type !== targetData.type) {
-          console.warn("cannot drag", sourceData.type, "into", targetData.type)
-          return
+          console.warn("cannot drag", sourceData.type, "into", targetData.type);
+          return;
         }
         editor
           .move(
             sourceData.parent,
             sourceData.index,
             targetData.parent,
-            targetData.index
+            targetData.index,
           )
-          .catch((e) => error("Failed to move component", e))
+          .catch((e) => error("Failed to move component", e));
       }}
     >
       {children}
@@ -137,39 +137,39 @@ export function DndPromptContext({
         {(source) => <PromptComponentPreview element={source} />}
       </DragOverlay>
     </DragDropProvider>
-  )
+  );
 }
 
 function PromptComponentPreview({ element }: { element: Draggable }) {
-  const { activeNode, values } = usePromptStore()
+  const { activeNode, values } = usePromptStore();
 
-  if (!activeNode) return null
+  if (!activeNode) return null;
 
-  const { type, id, parent } = DragDropData.parse(element.data)
-  const lp = values[activeNode]
+  const { type, id, parent } = DragDropData.parse(element.data);
+  const lp = values[activeNode];
 
   if (type === "prompt-section") {
     const section = deepSearch(lp, {
       ...parent,
-      sectionId: id
-    })
-    if (!section) return null
-    return <PromptSectionViewer section={section} />
+      sectionId: id,
+    });
+    if (!section) return null;
+    return <PromptSectionViewer section={section} />;
   } else if (type === "prompt-group") {
     const group = deepSearch(lp, {
       ...parent,
-      groupId: id
-    })
-    if (!group) return null
-    return <PromptGroupViewer group={group} />
+      groupId: id,
+    });
+    if (!group) return null;
+    return <PromptGroupViewer group={group} />;
   } else if (type === "prompt-item") {
     const item = deepSearch(lp, {
       ...parent,
-      itemId: id
-    })
-    if (!item) return null
-    return <PromptItemViewer item={item} />
+      itemId: id,
+    });
+    if (!item) return null;
+    return <PromptItemViewer item={item} />;
   } else {
-    return <p>Non-previewable</p>
+    return <p>Non-previewable</p>;
   }
 }
