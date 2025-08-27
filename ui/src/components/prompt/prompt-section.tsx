@@ -43,14 +43,16 @@ export function PromptSectionEditor({
         {getLabel(section.id)}
       </p>
       <DraggablePromptComponent
-        slotClassName={"pl:rounded-sm"}
-        className={promptSectionStyles}
         data={{
           type: "prompt-section",
           id: section.id,
           parent: parent,
           index: index,
         }}
+        slotClassName={"pl:rounded-sm"}
+        handleClassName={"pl:size-4"}
+        className={promptSectionStyles}
+        handle
       >
         {section.groups.map((group, groupIndex) => (
           <PromptGroupEditor

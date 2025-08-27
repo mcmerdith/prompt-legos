@@ -7,6 +7,7 @@ import {
   useDraggable,
   useDroppable,
 } from "@dnd-kit/react";
+import { GripVerticalIcon } from "lucide-react";
 import React, { ComponentPropsWithoutRef } from "react";
 import z from "zod/v4";
 
@@ -48,18 +49,25 @@ type DragDropData = z.infer<typeof DragDropData>;
 
 export function DraggablePromptComponent({
   data,
+  handle,
   slotClassName,
+  handleClassName,
   className,
+  children,
   ...props
 }: {
-  slotClassName?: string;
   data: DragDropData;
+  handle?: boolean;
+  slotClassName?: string;
+  handleClassName?: string;
 } & ComponentPropsWithoutRef<"div">) {
-  const { ref, isDragging } = useDraggable({
+  const { ref, handleRef, isDragging } = useDraggable({
     id: data.id,
     type: data.type,
     data: data,
   });
+
+  if (isDragging) console.log("dragging", data.type, data.id);
 
   return (
     <DroppablePromptSlot className={slotClassName} data={data}>
@@ -67,7 +75,12 @@ export function DraggablePromptComponent({
         className={cn(className, isDragging ? "opacity-50" : undefined)}
         ref={ref}
         {...props}
-      />
+      >
+        {children}
+        {handle && (
+          <GripVerticalIcon ref={handleRef} className={handleClassName} />
+        )}
+      </div>
     </DroppablePromptSlot>
   );
 }
@@ -82,7 +95,7 @@ export function DroppablePromptSlot({
   const { ref, isDropTarget } = useDroppable({
     id: data.id,
     type: `${data.type}-slot`,
-    accept: data.type,
+    accept: [data.type, `${data.type}-template`],
     data: data,
   });
 

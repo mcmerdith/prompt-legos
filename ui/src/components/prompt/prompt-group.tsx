@@ -45,14 +45,16 @@ export function PromptGroupEditor({
   const path = { ...parent, groupId: group.id };
   return (
     <DraggablePromptComponent
-      slotClassName={"pl:rounded-lg"}
-      className={promptGroupStyles}
       data={{
         type: "prompt-group",
         id: group.id,
         parent: parent,
         index: index,
       }}
+      slotClassName={"pl:rounded-lg"}
+      handleClassName={"pl:size-3"}
+      className={promptGroupStyles}
+      handle
     >
       <UnifiedInputContextProvider value={unifiedInput}>
         {group.items.map((item, itemIndex) => (

@@ -4,11 +4,13 @@ import { PromptItem } from "@/lib/prompt";
 import { deepSearch, GroupPath } from "@/lib/prompt-search";
 import { useUnifiedInputContext } from "@/lib/use-editor-context";
 import type { Editor } from "@/lib/use-prompt-editor";
+import { cn } from "@/lib/utils";
 
 import { PromptComponentPathProps } from "./component-props";
 
-const promptItemStyles =
-  "pl:flex pl:flex-row pl:gap-1 pl:rounded-md pl:border pl:border-primary/80 pl:bg-primary/60 pl:px-1 pl:text-xs";
+const promptItemStyles = cn(
+  "pl:flex pl:flex-row pl:items-center pl:gap-1 pl:rounded-md pl:border pl:border-primary/80 pl:bg-primary/60 pl:px-1 pl:text-xs",
+);
 
 export function PromptItemViewer({ item }: { item: PromptItem }) {
   return (
@@ -47,14 +49,16 @@ export function PromptItemEditor({
   };
   return (
     <DraggablePromptComponent
-      slotClassName={"pl:rounded-md"}
-      className={promptItemStyles}
       data={{
         type: "prompt-item",
         id: item.id,
         parent: parent,
         index: index,
       }}
+      slotClassName={"pl:rounded-md"}
+      handleClassName={"pl:size-3"}
+      className={promptItemStyles}
+      handle
     >
       <input
         autoFocus={autofocusInputId === item.id}
