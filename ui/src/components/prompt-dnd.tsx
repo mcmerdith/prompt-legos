@@ -14,11 +14,13 @@ import z from "zod/v4";
 import { PromptGroupViewer } from "@/components/prompt/prompt-group";
 import { PromptItemViewer } from "@/components/prompt/prompt-item";
 import { PromptSectionViewer } from "@/components/prompt/prompt-section";
+import { VerticalSeparator } from "@/components/separator";
 import {
   deepSearch,
   GroupPath,
   PromptPath,
   SectionPath,
+  type ComponentParentPath,
 } from "@/lib/prompt-search";
 import { error } from "@/lib/toast";
 import { InitializedEditor } from "@/lib/use-prompt-editor";
@@ -47,6 +49,18 @@ const DragDropData = z.union([
 ]);
 type DragDropData = z.infer<typeof DragDropData>;
 
+function idString(parent: ComponentParentPath, self?: string) {
+  return [
+    parent.promptId,
+    parent.sectionId,
+    parent.groupId,
+    parent.itemId,
+    self,
+  ]
+    .filter((c) => !!c)
+    .join("/");
+}
+
 export function DraggablePromptComponent({
   data,
   handle,
@@ -62,12 +76,10 @@ export function DraggablePromptComponent({
   handleClassName?: string;
 } & ComponentPropsWithoutRef<"div">) {
   const { ref, handleRef, isDragging } = useDraggable({
-    id: data.id,
+    id: idString(data.parent, data.id),
     type: data.type,
     data: data,
   });
-
-  if (isDragging) console.log("dragging", data.type, data.id);
 
   return (
     <DroppablePromptSlot className={slotClassName} data={data}>
@@ -88,27 +100,40 @@ export function DraggablePromptComponent({
 export function DroppablePromptSlot({
   data,
   className,
+  children,
   ...props
 }: {
   data: DragDropData;
 } & ComponentPropsWithoutRef<"div">) {
-  const { ref, isDropTarget } = useDroppable({
-    id: data.id,
+  const { ref, isDropTarget, droppable } = useDroppable({
+    id: idString(data.parent, data.id),
     type: `${data.type}-slot`,
     accept: [data.type, `${data.type}-template`],
     data: data,
   });
 
+  const dragOperation = droppable.manager?.dragOperation;
+  const selfDrop = dragOperation?.target?.id === dragOperation?.source?.id;
+
   return (
-    <div
-      ref={ref}
-      className={cn(
-        "pl:border-2 pl:border-dashed",
-        !isDropTarget ? "pl:border-transparent" : undefined, // todo fix this by making the elements fixed size
-        className,
+    <div className={cn("pl:flex pl:flex-row pl:gap-2")}>
+      {!selfDrop && isDropTarget && (
+        <VerticalSeparator className={"pl:bg-foreground"} />
       )}
-      {...props}
-    />
+      <div
+        ref={ref}
+        className={cn(
+          "pl:border-2",
+          selfDrop && isDropTarget
+            ? "pl:border-dashed"
+            : "pl:border-transparent", // todo fix this by making the elements fixed size
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+    </div>
   );
 }
 
@@ -119,11 +144,9 @@ export function DndPromptContext({
   editor: InitializedEditor;
   children?: React.ReactNode;
 }) {
-  // const editor = useEditorContext()
   return (
     <DragDropProvider
       sensors={[PointerSensor, KeyboardSensor]}
-      // collisionDetection={closestCorners}
       onDragEnd={({ operation, canceled }) => {
         if (canceled) return;
         const { source, target } = operation;
