@@ -1,12 +1,16 @@
 import type { LGraphNode } from "@comfyorg/comfyui-frontend-types";
 import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { extendTailwindMerge } from "tailwind-merge";
 import { z } from "zod/v4";
 
 import type { NodeId } from "@/utils/shims";
 import { app } from "@/utils/shims";
 
 export { v4 as uuid } from "uuid";
+
+const twMerge = extendTailwindMerge({
+  prefix: "pl",
+}); // TODO: add the rest of the tailwind config to twmerge
 
 export const MapById = <T extends z.ZodType>(type: T) =>
   z.map(z.uuidv4().or(z.string()), type);
