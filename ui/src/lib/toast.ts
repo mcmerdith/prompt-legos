@@ -34,7 +34,7 @@ function error(title: string, message?: string, options?: PLErrorToastOptions) {
   toastImpl("error", title, message, options);
 }
 
-function fatal(
+export function fatal(
   title: string,
   message?: string,
   options?: PLToastOptions,
@@ -62,6 +62,5 @@ export const toast = {
   success,
   warn,
   error,
-  fatal,
   toast: toastImpl,
 };

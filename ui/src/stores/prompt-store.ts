@@ -5,7 +5,7 @@ import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { createSinglePrompt, LegoPrompt } from "@/lib/prompt";
-import { toast } from "@/lib/toast";
+import { fatal, toast } from "@/lib/toast";
 import type { NodeId } from "@/utils/shims";
 
 const NodeId = z.union([z.string(), z.number()]);
@@ -82,7 +82,7 @@ export const usePromptStore = create<PromptStoreState>()(
           const store = get();
           const spec = store.inputSpec[nodeId];
           if (!spec)
-            toast.fatal(
+            fatal(
               "Failed to recreate prompt store!",
               `Node ${nodeId} has no saved input spec. Try reloading or recreating the node`,
             );
@@ -126,7 +126,7 @@ export const usePromptStore = create<PromptStoreState>()(
           };
         },
         migrate: (_state, _version) => {
-          toast.fatal(
+          fatal(
             "Incompatible version detected!",
             "Please downgrade or use the 'Reset' button in settings",
           );
