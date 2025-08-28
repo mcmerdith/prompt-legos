@@ -20,38 +20,10 @@ function create<T>(typeName: string = "", defaultValue?: T) {
   };
 }
 
-export const {
-  Context: EditorContext,
-  Provider: EditorContextProvider,
-  useContext: useEditorContext,
-} = create<InitializedEditor | null>("Editor", null);
+export const { Provider: EditorContextProvider, useContext: useEditorContext } =
+  create<InitializedEditor | null>("Editor", null);
 
 export const {
-  Context: UnifiedInputContext,
   Provider: UnifiedInputContextProvider,
   useContext: useUnifiedInputContext,
-} = create<ReturnType<typeof useUnifiedInput>>("UnifiedInputContextProvider");
-
-export const {
-  Context: PromptIdContext,
-  Provider: PromptIdContextProvider,
-  useContext: usePromptIdContext,
-} = create<string>("PromptId");
-
-export const {
-  Context: SectionIdContext,
-  Provider: SectionIdContextProvider,
-  useContext: useSectionIdContext,
-} = create<string>("SectionId");
-
-export const {
-  Context: GroupIdContext,
-  Provider: GroupIdContextProvider,
-  useContext: useGroupIdContext,
-} = create<string>("GroupId");
-
-export const {
-  Context: ItemIdContext,
-  Provider: ItemIdContextProvider,
-  useContext: useItemIdContext,
-} = create<string>("ItemId");
+} = create<ReturnType<typeof useUnifiedInput>>("UnifiedInput");

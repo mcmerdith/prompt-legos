@@ -66,7 +66,9 @@ export function usePromptEditor(nodeId: NodeId): Editor | InitializedEditor {
   const node = getPromptNode(nodeId);
 
   if (!node) {
-    throw new Error(`Prompt node with ID ${nodeId} not found`);
+    throw new Error("Prompt node not found", {
+      cause: `Node ID ${nodeId} is not found, or is not a prompt node`,
+    });
   }
 
   return {
