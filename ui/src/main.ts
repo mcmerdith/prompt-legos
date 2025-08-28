@@ -1,6 +1,6 @@
 import { registerPromptCreator } from "./prompt-creator";
+import { registerPromptLibrary } from "./prompt-library";
 import { registerPromptWidget } from "./prompt-widget";
-import { registerSidebar } from "./sidebar-tab";
 
 import "./utils/i18n";
 
@@ -8,7 +8,7 @@ import { app } from "./utils/shims";
 
 void import("./index.css");
 
-registerSidebar();
+registerPromptLibrary();
 registerPromptWidget();
 registerPromptCreator();
 

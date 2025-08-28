@@ -14,49 +14,37 @@ function toastTimeoutOptions(): PLToastOptions {
   };
 }
 
-export function success(
-  title: string,
-  message?: string,
-  options?: PLToastOptions,
-) {
+function success(title: string, message?: string, options?: PLToastOptions) {
   options ??= toastTimeoutOptions();
-  console.warn(title, message);
-  toast("success", title, message, options);
+  console.log(title, message);
+  toastImpl("success", title, message, options);
 }
 
-export function warn(
-  title: string,
-  message?: string,
-  options?: PLErrorToastOptions,
-) {
+function warn(title: string, message?: string, options?: PLErrorToastOptions) {
   options ??= toastTimeoutOptions();
   console.warn(title, message);
   if (options?.error) console.warn(options.error);
-  toast("warn", title, message, options);
+  toastImpl("warn", title, message, options);
 }
 
-export function error(
-  title: string,
-  message?: string,
-  options?: PLErrorToastOptions,
-) {
+function error(title: string, message?: string, options?: PLErrorToastOptions) {
   options ??= toastTimeoutOptions();
   console.error(title, message);
   if (options?.error) console.error(options.error);
-  toast("error", title, message, options);
+  toastImpl("error", title, message, options);
 }
 
-export function fatal(
+function fatal(
   title: string,
   message?: string,
   options?: PLToastOptions,
 ): never {
   console.error(title, message);
-  toast("error", title, message, options);
+  toastImpl("error", title, message, options);
   throw new Error(message);
 }
 
-export function toast(
+function toastImpl(
   severity: ToastMessageOptions["severity"],
   title: string,
   message?: string,
@@ -69,3 +57,11 @@ export function toast(
     ...options,
   });
 }
+
+export const toast = {
+  success,
+  warn,
+  error,
+  fatal,
+  toast: toastImpl,
+};

@@ -85,6 +85,7 @@ export function PromptItemEditor({
         }
         type={"number"}
         value={item.weight}
+        tabIndex={-1}
         onKeyDown={(event) => keydownHandler(event, index, true)}
         onChange={(event) => {
           editor.rawUpdate((p) => {

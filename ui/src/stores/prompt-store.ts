@@ -5,7 +5,7 @@ import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { createSinglePrompt, LegoPrompt } from "@/lib/prompt";
-import { error, fatal, warn } from "@/lib/toast";
+import { toast } from "@/lib/toast";
 import type { NodeId } from "@/utils/shims";
 
 const NodeId = z.union([z.string(), z.number()]);
@@ -18,10 +18,15 @@ const PromptStoreData = z.object({
 type PromptStoreData = z.infer<typeof PromptStoreData>;
 
 interface PromptStoreActions {
+  /** Set the node to editor in the prompt creator */
   setActiveEditor(nodeId: NodeId | undefined): void;
+  /** Set the current input spec for a node */
   create(nodeId: NodeId, promptIds: string[], force?: boolean): void;
+  /** Recreate a nodes value based on its stored input spec */
   recreate(nodeId: NodeId): void;
+  /** Delete the stored value for a node */
   delete(nodeId: NodeId): void;
+  /** Update the stored  value for a node */
   update(
     nodeId: NodeId,
     update: (current: WritableDraft<LegoPrompt>) => void,
@@ -42,11 +47,11 @@ export const usePromptStore = create<PromptStoreState>()(
           set((state) => {
             const oldIds = new Set(state.inputSpec[nodeId]);
             const newIds = new Set(promptIds);
-            if (oldIds.size > -1) {
+            if (oldIds.size > 0) {
               const difference = newIds.symmetricDifference(oldIds);
 
               if (difference.size > 0) {
-                warn(
+                toast.warn(
                   "Prompt node mismatch!",
                   `Node ${nodeId} expected [${[...oldIds]}], but we have [${[...newIds]}]. You should recreate the node`,
                 );
@@ -77,12 +82,11 @@ export const usePromptStore = create<PromptStoreState>()(
           const store = get();
           const spec = store.inputSpec[nodeId];
           if (!spec)
-            fatal(
+            toast.fatal(
               "Failed to recreate prompt store!",
               `Node ${nodeId} has no saved input spec. Try reloading or recreating the node`,
             );
-          store.delete(nodeId);
-          store.create(nodeId, spec);
+          store.create(nodeId, spec, true);
         },
         delete: (nodeId) =>
           set((state) => {
@@ -93,7 +97,7 @@ export const usePromptStore = create<PromptStoreState>()(
           set((current) => {
             const value = current.values[nodeId];
             if (!value) {
-              error("Failed to update prompt", "Not initialized");
+              toast.error("Failed to update prompt", "Not initialized");
               return;
             }
             update(value);
@@ -105,7 +109,7 @@ export const usePromptStore = create<PromptStoreState>()(
         merge: (persistedState, currentState) => {
           const validated = PromptStoreData.safeParse(persistedState);
           if (!validated.success) {
-            warn("Invalid prompt store, re-initializing...", undefined, {
+            toast.warn("Invalid prompt store, re-initializing...", undefined, {
               error: validated.error,
             });
             console.warn(z.prettifyError(validated.error));
@@ -122,7 +126,7 @@ export const usePromptStore = create<PromptStoreState>()(
           };
         },
         migrate: (_state, _version) => {
-          fatal(
+          toast.fatal(
             "Incompatible version detected!",
             "Please downgrade or use the 'Reset' button in settings",
           );

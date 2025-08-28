@@ -66,7 +66,7 @@ export function newPromptGroup(
 ): PromptGroup {
   return {
     id: uuid(),
-    items: items ?? [],
+    items: items ?? [newPromptItem()],
     weight: weight ?? 1,
   };
 }
@@ -78,7 +78,7 @@ export function newPromptSection(
 ): PromptSection {
   return {
     id: id ?? uuid(),
-    groups: groups ?? [],
+    groups: groups ?? [newPromptGroup()],
     weight: weight ?? 1,
   };
 }
@@ -86,18 +86,6 @@ export function newPromptSection(
 export function createSinglePrompt(id?: string): SinglePrompt {
   return {
     id: id ?? uuid(),
-    sections: [
-      {
-        id: "preamble",
-        groups: [
-          {
-            id: uuid(),
-            items: [],
-            weight: 1,
-          },
-        ],
-        weight: 1,
-      },
-    ],
+    sections: [newPromptSection("preamble")],
   };
 }

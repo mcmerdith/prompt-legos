@@ -27,7 +27,7 @@ export const {
 } = create<InitializedEditor | null>("Editor", null);
 
 export const {
-  Context: UnifiedInputContxt,
+  Context: UnifiedInputContext,
   Provider: UnifiedInputContextProvider,
   useContext: useUnifiedInputContext,
 } = create<ReturnType<typeof useUnifiedInput>>("UnifiedInputContextProvider");

@@ -22,7 +22,7 @@ import {
   SectionPath,
   type ComponentParentPath,
 } from "@/lib/prompt-search";
-import { error } from "@/lib/toast";
+import { toast } from "@/lib/toast";
 import { InitializedEditor } from "@/lib/use-prompt-editor";
 import { cn } from "@/lib/utils";
 import { usePromptStore } from "@/stores/prompt-store";
@@ -166,7 +166,7 @@ export function DndPromptContext({
             targetData.parent,
             targetData.index,
           )
-          .catch((e) => error("Failed to move component", e));
+          .catch((e) => toast.error("Failed to move component", e));
       }}
     >
       {children}

@@ -6,7 +6,6 @@ import {
   SinglePromptViewer,
 } from "@/components/prompt/single-prompt";
 import type { LegoPrompt } from "@/lib/prompt";
-import { warn } from "@/lib/toast";
 import type { InitializedEditor } from "@/lib/use-prompt-editor";
 import { cn } from "@/lib/utils";
 
@@ -55,23 +54,6 @@ export default function LegoPromptEditor({
   return (
     <DndPromptContext editor={editor}>
       <Wrapper className={className}>
-        <button
-          onClick={() => {
-            editor.rawUpdate((state) => {
-              state.prompts = [];
-            });
-            try {
-              void editor.node.recreate?.();
-            } catch (e) {
-              warn(
-                "Your ComfyUI version doesn't support automatic recreation!",
-                "Use 'Fix node (recreate)'",
-              );
-            }
-          }}
-        >
-          Reset Prompt
-        </button>
         {editor.value.prompts.map((prompt) => (
           <SinglePromptEditor
             editor={editor}

@@ -10,7 +10,7 @@ export { v4 as uuid } from "uuid";
 
 const twMerge = extendTailwindMerge({
   prefix: "pl",
-}); // TODO: add the rest of the tailwind config to twmerge
+}); // TODO: add the rest of the tailwind config to twMerge
 
 export const MapById = <T extends z.ZodType>(type: T) =>
   z.map(z.uuidv4().or(z.string()), type);

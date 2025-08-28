@@ -42,6 +42,8 @@ export function registerPromptWidget() {
         LEGO_PROMPT: (node, inputName, inputSpec: InputSpec) => {
           const [_, { segments }] = LEGO_PROMPT_INPUT_SPEC.parse(inputSpec);
 
+          let internalNodeState: LegoPrompt | undefined = undefined;
+
           const originalOnAdded = node.onAdded;
           node.onAdded = function (graph) {
             originalOnAdded?.apply(node, [graph]);
@@ -54,12 +56,29 @@ export function registerPromptWidget() {
             <PromptWidget node={node} />,
             {
               getValue(): LegoPrompt {
-                return (
-                  usePromptStore.getState().values[node.id] ?? { prompts: [] }
-                );
+                if (node.id === -1) {
+                  // node not yet created, all we have is the internal state
+                  return internalNodeState ?? { prompts: [] };
+                } else {
+                  const state = usePromptStore.getState();
+                  if (internalNodeState) {
+                    // we need to push the internal state to the store
+                    state.update(node.id, (current) => {
+                      current.prompts = internalNodeState!.prompts;
+                    });
+                    // get rid of it so we don't infinitely update
+                    internalNodeState = undefined;
+                  }
+                  return (
+                    state.values[node.id] ?? {
+                      prompts: [],
+                    }
+                  );
+                }
               },
               setValue(_value: LegoPrompt) {
                 // todo
+                internalNodeState = LegoPrompt.parse(_value);
                 console.debug(node.id, "setValue called", _value);
               },
               getMinHeight() {

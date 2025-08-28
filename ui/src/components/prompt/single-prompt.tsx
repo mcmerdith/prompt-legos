@@ -6,7 +6,7 @@ import {
   PromptSectionViewer,
 } from "@/components/prompt/prompt-section";
 import { getLabel, SinglePrompt } from "@/lib/prompt";
-import { error } from "@/lib/toast";
+import { toast } from "@/lib/toast";
 import type { Editor } from "@/lib/use-prompt-editor";
 
 function Wrapper({ id, children }: { id: string; children?: React.ReactNode }) {
@@ -60,7 +60,7 @@ export function SinglePromptEditor({
           const name = prompt("New section name");
           editor
             .create(path, undefined, name?.replace(/\s/g, "-"))
-            .catch((e) => error("Failed to create section", e));
+            .catch((e) => toast.error("Failed to create section", e));
         }}
         className="pl:flex pl:flex-row pl:items-center pl:justify-start pl:gap-1"
       >

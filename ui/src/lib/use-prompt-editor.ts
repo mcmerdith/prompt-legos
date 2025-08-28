@@ -21,7 +21,7 @@ import { getPromptNode, insertItem, moveItem } from "@/lib/utils";
 import { usePromptStore } from "@/stores/prompt-store";
 import type { NodeId } from "@/utils/shims";
 
-import { fatal } from "./toast";
+import { toast } from "./toast";
 
 export type Editor = {
   editorName: string;
@@ -175,7 +175,7 @@ export function usePromptEditor(nodeId: NodeId): Editor | InitializedEditor {
         updateValue(node.id, (lp) => {
           if (isPromptPath(sourcePath) || isPromptPath(targetPath)) {
             if (!isPromptPath(sourcePath) || !isPromptPath(targetPath))
-              fatal(
+              toast.fatal(
                 "Illegal move",
                 "Item types were not equal: expected both to be single prompts",
               );
@@ -194,7 +194,7 @@ export function usePromptEditor(nodeId: NodeId): Editor | InitializedEditor {
             return;
           } else if (isSectionPath(sourcePath) || isSectionPath(targetPath)) {
             if (!isSectionPath(sourcePath) || !isSectionPath(targetPath))
-              fatal(
+              toast.fatal(
                 "Illegal move",
                 "Item types were not equal: expected both to be sections",
               );
@@ -208,7 +208,7 @@ export function usePromptEditor(nodeId: NodeId): Editor | InitializedEditor {
             return;
           } else if (isGroupPath(sourcePath) || isGroupPath(targetPath)) {
             if (!isGroupPath(sourcePath) || !isGroupPath(targetPath))
-              fatal(
+              toast.fatal(
                 "Illegal move",
                 "Item types were not equal: expected both to be groups",
               );

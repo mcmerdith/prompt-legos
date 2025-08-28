@@ -1,12 +1,6 @@
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type KeyboardEvent,
-} from "react";
+import { useCallback, useRef, useState, type KeyboardEvent } from "react";
 
-import { error } from "@/lib/toast";
+import { toast } from "@/lib/toast";
 import { useEditorContext } from "@/lib/use-editor-context";
 
 import { PromptGroup } from "./prompt";
@@ -26,7 +20,6 @@ export function useUnifiedInput({
   const valueInputs = useRef<{ [id: string]: HTMLInputElement | null }>({});
   const weightInputs = useRef<{ [id: string]: HTMLInputElement | null }>({});
   const [focusItemId, setFocusItemId] = useState<string | null>(null);
-  const [shouldCreateBlank, setShouldCreateBlank] = useState(false);
 
   const setFocusedInput = useCallback(
     (index: number, weightInput?: boolean) => {
@@ -55,19 +48,10 @@ export function useUnifiedInput({
         .then((item) => {
           setFocusItemId(item.id);
         })
-        .catch((e) => error("Failed to create new item", e));
+        .catch((e) => toast.error("Failed to create new item", e));
     },
     [editor, promptId, sectionId, group.id],
   );
-
-  // make sure there is always at least one item
-  if (shouldCreateBlank) {
-    setShouldCreateBlank(false);
-    createItem();
-  }
-  useEffect(() => {
-    if (group.items.length === 0) setShouldCreateBlank(true);
-  }, [group.items.length]);
 
   // make sure we focus new items
   if (focusItemId) {
@@ -93,7 +77,7 @@ export function useUnifiedInput({
           },
           index,
         )
-        .catch((e) => error("Failed to delete item", e));
+        .catch((e) => toast.error("Failed to delete item", e));
       return true;
     },
     [group.items, editor, promptId, sectionId, group.id],

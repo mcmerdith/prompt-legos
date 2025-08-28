@@ -7,7 +7,7 @@ import {
 } from "@/components/prompt/prompt-group";
 import { getLabel, PromptSection } from "@/lib/prompt";
 import { PromptPath } from "@/lib/prompt-search";
-import { error } from "@/lib/toast";
+import { toast } from "@/lib/toast";
 import type { Editor } from "@/lib/use-prompt-editor";
 import { cn } from "@/lib/utils";
 
@@ -69,7 +69,7 @@ export function PromptSectionEditor({
           onClick={() => {
             editor
               .create(path)
-              .catch((e) => error("Failed to create group", e));
+              .catch((e) => toast.error("Failed to create group", e));
           }}
         >
           <Plus className="pl:size-4" />
@@ -78,7 +78,7 @@ export function PromptSectionEditor({
           onClick={() => {
             editor
               .delete(parent, index)
-              .catch((e) => error("Failed to delete group", e));
+              .catch((e) => toast.error("Failed to delete group", e));
           }}
         >
           <Trash className="pl:size-4" />

@@ -7,7 +7,7 @@ import {
 } from "@/components/prompt/prompt-item";
 import { PromptGroup } from "@/lib/prompt";
 import { SectionPath } from "@/lib/prompt-search";
-import { error } from "@/lib/toast";
+import { toast } from "@/lib/toast";
 import { UnifiedInputContextProvider } from "@/lib/use-editor-context";
 import type { Editor } from "@/lib/use-prompt-editor";
 import { useUnifiedInput } from "@/lib/use-unified-input";
@@ -80,7 +80,7 @@ export function PromptGroupEditor({
         onClick={() => {
           editor
             .delete(parent, index)
-            .catch((e) => error("Failed to delete group", e));
+            .catch((e) => toast.error("Failed to delete group", e));
         }}
         className="pl:px-1"
       >
