@@ -24,6 +24,14 @@ export function registerPromptLibrary() {
 
     commands: [
       {
+        id: "PromptLegos.PromptLibrary.Toggle",
+        function() {
+          app.extensionManager.command.execute(
+            `Workspace.ToggleSidebarTab.${ElementId}`,
+          );
+        },
+      },
+      {
         id: "PromptLegos.PromptLibrary.Open",
         function() {
           const open = document.getElementById(ElementId) !== null;
@@ -34,7 +42,7 @@ export function registerPromptLibrary() {
           }
 
           app.extensionManager.command.execute(
-            `Workspace.ToggleSidebarTab.${ElementId}`,
+            "PromptLegos.PromptLibrary.Toggle",
           );
         },
       },

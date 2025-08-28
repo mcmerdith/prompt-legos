@@ -1,5 +1,6 @@
 import { BookDashedIcon, RotateCcwIcon } from "lucide-react";
 
+import { Button } from "@/components/button";
 import LegoPromptEditor from "@/components/prompt-editor";
 import { EditorContextProvider } from "@/lib/use-editor-context";
 import { isInitializedEditor, usePromptEditor } from "@/lib/use-prompt-editor";
@@ -29,10 +30,17 @@ export default function PromptCreator({
         }
       >
         <div className={"pl:absolute pl:left-0 pl:flex pl:flex-row pl:gap-2"}>
-          <button title={"Open Template Library"}>
-            <BookDashedIcon />
-          </button>
-          <button
+          <Button
+            iconStart={<BookDashedIcon />}
+            title={"Open Template Library"}
+            onClick={() => {
+              app.extensionManager.command.execute(
+                "PromptLegos.PromptLibrary.Toggle",
+              );
+            }}
+          />
+          <Button
+            iconStart={<RotateCcwIcon />}
             title={"Reset Prompt"}
             onClick={() => {
               app.extensionManager.dialog
@@ -44,9 +52,7 @@ export default function PromptCreator({
                   recreate(editor.node.id);
                 });
             }}
-          >
-            <RotateCcwIcon />
-          </button>
+          />
         </div>
         <h3>
           Editing {editor.editorName} ({activeNode})

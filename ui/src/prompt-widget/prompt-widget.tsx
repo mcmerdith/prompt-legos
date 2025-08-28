@@ -1,5 +1,6 @@
 import type { LGraphNode } from "@comfyorg/comfyui-frontend-types";
 
+import { Button } from "@/components/button";
 import { LegoPromptViewer } from "@/components/prompt-editor";
 import { usePromptStore } from "@/stores/prompt-store";
 import { app } from "@/utils/shims";
@@ -16,8 +17,9 @@ export default function PromptWidget({ node }: { node: LGraphNode }) {
         <LegoPromptViewer prompt={value} />
       </main>
       <footer className="pl:flex pl:flex-col pl:items-start pl:justify-center pl:gap-2 pl:pt-1">
-        <button
-          className="pl:w-full pl:rounded-sm pl:border-secondary/80 pl:bg-secondary/60 pl:p-1"
+        <Button
+          variant={"widget"}
+          className={"pl:w-full"}
           onClick={() => {
             setActiveEditor(node.id);
             app.extensionManager.command.execute(
@@ -26,7 +28,7 @@ export default function PromptWidget({ node }: { node: LGraphNode }) {
           }}
         >
           Open prompt creator
-        </button>
+        </Button>
       </footer>
     </div>
   );

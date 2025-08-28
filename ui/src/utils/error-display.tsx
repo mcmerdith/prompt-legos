@@ -1,5 +1,7 @@
 import { FallbackProps } from "react-error-boundary";
 
+import { Button } from "@/components/button";
+
 export function ErrorDisplay({ error, resetErrorBoundary }: FallbackProps) {
   return (
     <div
@@ -9,7 +11,7 @@ export function ErrorDisplay({ error, resetErrorBoundary }: FallbackProps) {
     >
       <h1 className={"pl:text-xl"}>Something went wrong...</h1>
       <p>{Error.isError(error) ? error.message : error}</p>
-      <button onClick={resetErrorBoundary}>Try again</button>
+      <Button onClick={resetErrorBoundary}>Try again</Button>
     </div>
   );
 }
