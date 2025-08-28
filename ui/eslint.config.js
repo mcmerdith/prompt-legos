@@ -33,6 +33,7 @@ export default [
       react: react,
     },
     rules: {
+      "@typescript-eslint/no-floating-promises": "error",
       "@typescript-eslint/no-unused-vars": "warn",
       "unused-imports/no-unused-imports": "warn",
       "prettier/prettier": "warn",
