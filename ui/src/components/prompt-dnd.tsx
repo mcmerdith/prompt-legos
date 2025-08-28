@@ -116,21 +116,11 @@ export function DroppablePromptSlot({
   const selfDrop = dragOperation?.target?.id === dragOperation?.source?.id;
 
   return (
-    <div className={cn("pl:flex pl:flex-row pl:gap-2")}>
+    <div className={cn("pl:flex pl:flex-row pl:gap-1")}>
       {!selfDrop && isDropTarget && (
         <VerticalSeparator className={"pl:bg-foreground"} />
       )}
-      <div
-        ref={ref}
-        className={cn(
-          "pl:border-2",
-          selfDrop && isDropTarget
-            ? "pl:border-dashed"
-            : "pl:border-transparent", // todo fix this by making the elements fixed size
-          className,
-        )}
-        {...props}
-      >
+      <div ref={ref} className={className} {...props}>
         {children}
       </div>
     </div>
