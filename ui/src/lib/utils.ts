@@ -74,8 +74,25 @@ export function moveItem<T>(
   targetIndex: number,
 ) {
   if (!source || !target) return false;
-  const elements = source.splice(sourceIndex, 1);
-  if (elements.length === 0) return false;
-  target.splice(targetIndex, 0, elements[0]);
+  console.log("moving item", sourceIndex, "to", targetIndex);
+  const element = source.at(sourceIndex);
+  if (!element) return false;
+  if (source === target) {
+    // we may need to alter the target position due to removing the element
+    if (sourceIndex === targetIndex) return true;
+    source.splice(sourceIndex, 1);
+    // we removed an element from the target array
+    if (sourceIndex < targetIndex) {
+      // if the removed element was before the target, decrease the index by 1
+      target.splice(targetIndex - 1, 0, element);
+    } else {
+      // if the removed element was after the target, do not decrease the index
+      target.splice(targetIndex, 0, element);
+    }
+  } else {
+    // separate arrays so proceed without alterations
+    source.splice(sourceIndex, 1);
+    target.splice(targetIndex, 0, element);
+  }
   return true;
 }
