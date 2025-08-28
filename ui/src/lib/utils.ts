@@ -74,7 +74,6 @@ export function moveItem<T>(
   targetIndex: number,
 ) {
   if (!source || !target) return false;
-  console.log("moving item", sourceIndex, "to", targetIndex);
   const element = source.at(sourceIndex);
   if (!element) return false;
   if (source === target) {
