@@ -1,7 +1,11 @@
+import { XIcon } from "lucide-react";
+
+import { Button } from "@/components/button";
 import { DraggablePromptComponent } from "@/components/prompt-dnd";
 import { VerticalSeparator } from "@/components/separator";
 import { PromptItem } from "@/lib/prompt";
 import { deepSearch, GroupPath } from "@/lib/prompt-search";
+import { toast } from "@/lib/toast";
 import { useUnifiedInputContext } from "@/lib/use-editor-context";
 import type { Editor } from "@/lib/use-prompt-editor";
 import { cn } from "@/lib/utils";
@@ -95,6 +99,15 @@ export function PromptItemEditor({
         onFocus={(event) => event.currentTarget.select()}
         ref={(el) => {
           weightInputsRef[item.id] = el;
+        }}
+      />
+      <Button
+        variant={"transparent"}
+        iconStart={<XIcon className={"pl:size-2"} />}
+        onClick={() => {
+          editor
+            .delete(parent, index)
+            .catch((e) => toast.error("Failed to delete item", e));
         }}
       />
     </DraggablePromptComponent>

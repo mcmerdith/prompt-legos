@@ -1,6 +1,10 @@
 import { PlusIcon, Trash } from "lucide-react";
 
-import { DraggablePromptComponent } from "@/components/prompt-dnd";
+import { Button } from "@/components/button";
+import {
+  DraggablePromptComponent,
+  DroppablePromptSlot,
+} from "@/components/prompt-dnd";
 import {
   PromptItemEditor,
   PromptItemViewer,
@@ -52,7 +56,7 @@ export function PromptGroupEditor({
         index: index,
       }}
       slotClassName={"pl:rounded-lg"}
-      handleClassName={"pl:size-3"}
+      handleClassName={"pl:size-2"}
       className={promptGroupStyles}
       handle
     >
@@ -69,23 +73,32 @@ export function PromptGroupEditor({
           />
         ))}
       </UnifiedInputContextProvider>
-      <button
-        onClick={() => {
-          unifiedInput.createItem();
+
+      <DroppablePromptSlot
+        data={{
+          type: "prompt-item",
+          id: "new-item",
+          parent: path,
+          index: group.items.length,
         }}
       >
-        <PlusIcon className="pl:size-3" />
-      </button>
-      <button
+        <Button
+          variant={"transparent"}
+          iconStart={<PlusIcon className="pl:size-3" />}
+          onClick={() => {
+            unifiedInput.createItem();
+          }}
+        />
+      </DroppablePromptSlot>
+      <Button
+        variant={"transparent"}
+        iconStart={<Trash className="pl:size-3" />}
         onClick={() => {
           editor
             .delete(parent, index)
             .catch((e) => toast.error("Failed to delete group", e));
         }}
-        className="pl:px-1"
-      >
-        <Trash className="pl:size-3" />
-      </button>
+      />
     </DraggablePromptComponent>
   );
 }
